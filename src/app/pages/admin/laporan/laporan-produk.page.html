@@ -1,0 +1,99 @@
+<app-admin-sidebar></app-admin-sidebar>
+<app-admin-header></app-admin-header>
+<div class="laporan-main-content">
+    <div class="laporan-container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="header-info">
+                <div class="page-title">Laporan Produk</div>
+                <div class="page-subtitle">Rekap data produk secara lengkap dan detail</div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-export"><ion-icon name="download-outline"></ion-icon> Export</button>
+            </div>
+        </div>
+
+        <!-- Statistik Cards -->
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-icon products"><ion-icon name="cube-outline"></ion-icon></div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ totalProduk }}</div>
+                    <div class="stat-label">Total Produk</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon active"><ion-icon name="checkmark-circle-outline"></ion-icon></div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ activeProduk }}</div>
+                    <div class="stat-label">Produk Aktif</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon draft"><ion-icon name="document-outline"></ion-icon></div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ draftProduk }}</div>
+                    <div class="stat-label">Draft</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon low-stock"><ion-icon name="alert-circle-outline"></ion-icon></div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ lowStockProduk }}</div>
+                    <div class="stat-label">Stok Rendah</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters Section -->
+        <div class="filters-section">
+            <div class="filter-group">
+                <label>Status</label>
+                <select [(ngModel)]="statusFilter" (change)="onStatusChange()">
+                    <option *ngFor="let s of statusOptions" [value]="s.value">{{ s.label }}</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Kategori</label>
+                <select [(ngModel)]="kategoriFilter" (change)="onKategoriChange()">
+                    <option *ngFor="let k of kategoriOptions" [value]="k">{{ k }}</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="table-container">
+            <div class="table-content">
+                <div class="table-headers">
+                    <div class="header-cell">No</div>
+                    <div class="header-cell">Status</div>
+                    <div class="header-cell">Nama Produk</div>
+                    <div class="header-cell">Kategori</div>
+                    <div class="header-cell">Harga</div>
+                    <div class="header-cell">Stok</div>
+                </div>
+                <div class="table-rows">
+                    <div *ngIf="isLoading" class="no-data"><ion-icon name="sync-outline" spin></ion-icon> Memuat data...
+                    </div>
+                    <div *ngIf="!isLoading && filteredProduk.length === 0" class="no-data"><ion-icon
+                            name="file-tray-outline"></ion-icon>
+                        <p>Tidak ada data produk</p>
+                    </div>
+                    <div *ngFor="let p of filteredProduk; let i = index" class="table-row">
+                        <div class="row-cell">{{ i + 1 }}</div>
+                        <div class="row-cell">
+                            <span class="status-badge" [ngClass]="{
+                                'active': p.status === 'active',
+                                'draft': p.status === 'draft'
+                            }">{{ p.status === 'active' ? 'Aktif' : 'Draft' }}</span>
+                        </div>
+                        <div class="row-cell">{{ p.name }}</div>
+                        <div class="row-cell">{{ p.category }}</div>
+                        <div class="row-cell">{{ formatRupiah(p.price) }}</div>
+                        <div class="row-cell">{{ p.stock }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

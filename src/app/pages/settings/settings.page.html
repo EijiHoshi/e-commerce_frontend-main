@@ -1,0 +1,25 @@
+<ion-content class="settings-content">
+    <div class="settings-header">
+        <button class="back-btn" (click)="goBack()">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+        </button>
+        <div class="settings-title">Settings</div>
+    </div>
+    <div class="settings-menu-list">
+        <button class="settings-menu-item" (click)="goToNotif()">
+            <span class="menu-icon"><ion-icon name="notifications-outline"></ion-icon></span>
+            <span class="menu-title">Notification center</span>
+            <span class="menu-arrow"><ion-icon name="chevron-forward-outline"></ion-icon></span>
+        </button>
+        <button class="settings-menu-item" (click)="goToPasswordManager()">
+            <span class="menu-icon"><ion-icon name="key-outline"></ion-icon></span>
+            <span class="menu-title">Password manager</span>
+            <span class="menu-arrow"><ion-icon name="chevron-forward-outline"></ion-icon></span>
+        </button>
+        <button class="settings-menu-item" (click)="goToDeleteAccount()">
+            <span class="menu-icon"><ion-icon name="ban-outline"></ion-icon></span>
+            <span class="menu-title">Delete Account</span>
+            <span class="menu-arrow"><ion-icon name="chevron-forward-outline"></ion-icon></span>
+        </button>
+    </div>
+</ion-content>

@@ -1,0 +1,97 @@
+<app-admin-sidebar></app-admin-sidebar>
+<app-admin-header></app-admin-header>
+
+<div class="laporan-main-content">
+  <div class="laporan-container">
+    <!-- Header Section -->
+    <div class="header-section">
+      <div class="header-info">
+        <div class="page-title">Laporan Penjualan</div>
+        <div class="page-subtitle">Rekap transaksi penjualan secara lengkap dan detail</div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-export"><ion-icon name="download-outline"></ion-icon> Export</button>
+      </div>
+    </div>
+
+    <!-- Statistik Cards -->
+    <div class="stats-cards">
+      <div class="stat-card">
+        <div class="stat-icon orders"><ion-icon name="cart-outline"></ion-icon></div>
+        <div class="stat-content">
+          <div class="stat-value">{{ totalOrders }}</div>
+          <div class="stat-label">Total Pesanan</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon completed"><ion-icon name="checkmark-done-outline"></ion-icon></div>
+        <div class="stat-content">
+          <div class="stat-value">{{ completedOrders }}</div>
+          <div class="stat-label">Pesanan Selesai</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon pending"><ion-icon name="time-outline"></ion-icon></div>
+        <div class="stat-content">
+          <div class="stat-value">{{ pendingOrders }}</div>
+          <div class="stat-label">Menunggu Pembayaran</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon cancelled"><ion-icon name="close-circle-outline"></ion-icon></div>
+        <div class="stat-content">
+          <div class="stat-value">{{ cancelledOrders }}</div>
+          <div class="stat-label">Dibatalkan</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filters-section">
+      <div class="filter-group">
+        <label>Status</label>
+        <select [(ngModel)]="statusFilter" (change)="onStatusChange()">
+          <option *ngFor="let opt of statusOptions" [value]="opt.value">{{ opt.label }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="table-container">
+      <div class="table-header">
+        <div class="table-title">
+          <h3>Daftar Laporan Penjualan</h3>
+        </div>
+      </div>
+      <div class="table-content">
+        <div class="table-headers">
+          <div class="header-cell">No</div>
+          <div class="header-cell">Status</div>
+          <div class="header-cell">Nama Pembeli</div>
+          <div class="header-cell">Tanggal</div>
+          <div class="header-cell">Total</div>
+        </div>
+        <div class="table-rows">
+          <div *ngIf="isLoading" class="no-data"><ion-icon name="sync-outline" spin></ion-icon> Memuat data...</div>
+          <div *ngIf="!isLoading && filteredLaporan.length === 0" class="no-data"><ion-icon
+              name="file-tray-outline"></ion-icon>
+            <p>Tidak ada data laporan penjualan</p>
+          </div>
+          <div *ngFor="let p of filteredLaporan; let i = index" class="table-row">
+            <div class="row-cell" data-label="No">{{ i + 1 }}</div>
+            <div class="row-cell" data-label="Status">
+              <span class="status-badge" [ngClass]="{
+                'status-completed': p.status === 'Diterima',
+                'status-pending': p.status === 'Menunggu Pembayaran',
+                'status-cancelled': p.status === 'Dibatalkan'
+              }">{{ p.status }}</span>
+            </div>
+            <div class="row-cell" data-label="Nama Pembeli">{{ p.user.name || '-' }}</div>
+            <div class="row-cell" data-label="Tanggal">{{ formatTanggal(p.created_at) }}</div>
+            <div class="row-cell" data-label="Total">Rp {{ p.total_amount | number:'1.0-0' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

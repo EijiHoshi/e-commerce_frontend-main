@@ -1,0 +1,93 @@
+// SETTINGS PAGE STYLE
+.settings-content {
+    --background: #fff !important;
+}
+
+.settings-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin-top: 44px;
+    margin-bottom: 36px;
+}
+
+.back-btn {
+    position: absolute;
+    left: 18px;
+    top: 0;
+    background: #FFD700;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    box-shadow: none;
+    z-index: 2;
+    padding: 0;
+}
+
+.back-btn ion-icon {
+    font-size: 30px;
+    color: #fff;
+}
+
+.settings-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #222;
+    text-align: center;
+    flex: 1;
+    margin-top: 0;
+}
+
+.settings-menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    margin-bottom: 24px;
+    padding: 0 0 0 0;
+}
+
+.settings-menu-item {
+    display: flex;
+    align-items: center;
+    background: #f8f8f8;
+    border-radius: 22px;
+    height: 64px;
+    padding: 0 22px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+    border: none;
+    outline: none;
+    transition: box-shadow 0.2s;
+}
+
+.settings-menu-item:active {
+    box-shadow: 0 4px 16px rgba(255, 215, 0, 0.10);
+}
+
+.menu-icon {
+    color: #FFD700;
+    font-size: 30px;
+    margin-right: 18px;
+    display: flex;
+    align-items: center;
+}
+
+.menu-title {
+    flex: 1;
+    font-size: 18px;
+    font-weight: 700;
+    color: #222;
+    text-align: left;
+}
+
+.menu-arrow {
+    color: #FFD700;
+    font-size: 20px;
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+}

@@ -1,0 +1,178 @@
+ion-content {
+    --background: #fff;
+    font-family: 'poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 400px;
+    width: 100%;
+    padding: 20px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.logo {
+    position: absolute;
+    top: -60px;
+    right: 0;
+    display: block;
+    margin: 0 auto 20px;
+    width: 40px;
+}
+
+h2 {
+    color: black;
+    text-align: center;
+    margin-bottom: 8px;
+}
+
+.subtext {
+    text-align: center;
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input[type="text"]::placeholder {
+    color: #888;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="tel"],
+input[type="date"] {
+    font-family: 'poppins', sans-serif;
+    color: black;
+    background-color: white;
+    width: 100%;
+    padding: 12px 16px;
+    border: 2px solid #ffd700;
+    border-radius: 30px;
+    outline: none;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+.gender-group {
+    border-color: #ffd700;
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    margin: 15px 0;
+}
+
+.gender-group label {
+    color: black;
+}
+
+.checkbox-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    margin-bottom: 20px;
+    text-align: center;
+    flex-wrap: wrap;
+}
+
+.checkbox-group label {
+    color: black;
+}
+
+.checkbox-group a {
+    font-weight: bold;
+    color: #ffd700;
+    text-decoration: none;
+}
+
+.btn {
+    font-family: 'poppins', sans-serif;
+    color: black;
+    width: 50%;
+    padding: 12px;
+    background: linear-gradient(to bottom, #ffd700, #ffd700);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    font-weight: normal;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto 0;
+}
+
+.signin-text {
+    font-family: 'poppins', sans-serif;
+    color: black;
+    text-align: center;
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+.signin-text a {
+    font-family: 'poppins', sans-serif;
+    color: #ffd700;
+    text-decoration: none;
+    font-weight: normal;
+}
+
+/* Sembunyikan radio dan checkbox asli */
+input[type="radio"],
+input[type="checkbox"] {
+    display: none;
+}
+
+/* Buat label yang bisa diklik sebagai pengganti */
+.gender-group label,
+.checkbox-group label {
+    position: relative;
+    padding-left: 30px;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Lingkaran (radio button) custom */
+.gender-group label::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 2px;
+    width: 15px;
+    height: 15px;
+    border: 2px solid #ffd700;
+    border-radius: 50%;
+    background-color: white;
+}
+
+/* Centang (checkbox) custom */
+.checkbox-group label::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 1px;
+    width: 15px;
+    height: 15px;
+    border: 2px solid #ffd700;
+    border-radius: 4px;
+    background-color: white;
+}
+
+/* Tampilkan warna kuning saat dipilih */
+input[type="radio"]:checked+label::before {
+    background-color: #ffd700;
+}
+
+input[type="checkbox"]:checked+label::before {
+    background-color: #ffd700;
+}

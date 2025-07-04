@@ -1,0 +1,250 @@
+.admin-header {
+    width: 100%;
+    height: 80px;
+    background: #fff;
+    border-bottom: 1px solid #E8EAED;
+    display: flex;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 101;
+    box-shadow: none;
+}
+
+.header-nav {
+    width: 100%;
+    height: 80px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 34px 0 34px;
+}
+
+.header-logo-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-circle {
+    width: 48px;
+    height: 48px;
+    background: #FFE600;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-e {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 800;
+    font-family: 'Inter', sans-serif;
+}
+
+.logo-title {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #1F2946;
+    font-family: 'Inter', sans-serif;
+    letter-spacing: 1px;
+    margin-top: 2px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.notif-box {
+    display: flex;
+    align-items: center;
+}
+
+.notif-btn {
+    width: 40px;
+    height: 40px;
+    background: #F3F4F6;
+    border-radius: 8px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: background 0.15s;
+    padding: 0;
+}
+
+.notif-btn ion-icon {
+    font-size: 1.3em;
+    color: #6B7186;
+}
+
+.notif-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 16px;
+    height: 16px;
+    background: #EF4343;
+    color: #fff;
+    font-size: 0.85em;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    border: none;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    border-radius: 20px;
+    padding: 0 12px 0 0;
+    cursor: pointer;
+    position: relative;
+    min-width: 0;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    background: #FFE600;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    min-width: 0;
+}
+
+.user-name {
+    font-size: 1.08rem;
+    font-weight: 800;
+    color: #1F2946;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+.user-desc {
+    color: #6B7186;
+    font-size: 0.98em;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.1;
+    white-space: nowrap;
+}
+
+.chevron {
+    font-size: 1.3em;
+    color: #6B7186;
+    margin-left: 8px;
+}
+
+.profile-dropdown {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.09);
+    min-width: 140px;
+    padding: 8px 0;
+    margin-top: 8px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    font-size: 1.01rem;
+    color: #222;
+    cursor: pointer;
+    transition: background 0.15s;
+}
+
+.dropdown-item:hover {
+    background: #f7f8fa;
+}
+
+// Responsive Design - Sama seperti dashboard
+@media (max-width: 768px) {
+    .header-nav {
+        padding: 0 16px;
+    }
+
+    .logo-title {
+        font-size: 1.5rem;
+    }
+
+    .header-actions {
+        gap: 12px;
+    }
+
+    .user-info {
+        display: none; // Sembunyikan info user di mobile
+    }
+
+    .chevron {
+        display: none; // Sembunyikan chevron di mobile
+    }
+
+    .user-menu {
+        padding: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-nav {
+        padding: 0 12px;
+    }
+
+    .logo-title {
+        font-size: 1.3rem;
+    }
+
+    .header-logo-section {
+        gap: 8px;
+    }
+
+    .logo-circle {
+        width: 40px;
+        height: 40px;
+    }
+
+    .logo-e {
+        font-size: 1.5rem;
+    }
+
+    .notif-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .avatar {
+        width: 36px;
+        height: 36px;
+        font-size: 1rem;
+    }
+}

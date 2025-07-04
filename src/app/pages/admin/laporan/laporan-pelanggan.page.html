@@ -1,0 +1,80 @@
+<!-- Sidebar dan header -->
+<app-admin-header></app-admin-header>
+<div class="admin-container">
+    <app-admin-sidebar></app-admin-sidebar>
+    <main class="laporan-main-content">
+        <div class="laporan-container">
+            <section class="header-section">
+                <div class="header-info">
+                    <h1 class="page-title">Laporan Pelanggan</h1>
+                    <p class="page-subtitle">Rekap data pelanggan secara lengkap dan detail</p>
+                </div>
+            </section>
+            <div class="stats-cards">
+                <div class="stat-card">
+                    <div class="stat-icon" [ngClass]="'total'"><ion-icon name="people-outline"></ion-icon></div>
+                    <div class="stat-content">
+                        <div class="stat-value">{{ statistik[0]?.value | number }}</div>
+                        <div class="stat-label">Total</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" [ngClass]="'active'"><ion-icon name="person-outline"></ion-icon></div>
+                    <div class="stat-content">
+                        <div class="stat-value">{{ statistik[1]?.value | number }}</div>
+                        <div class="stat-label">Aktif</div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon" [ngClass]="'new'"><ion-icon name="person-add-outline"></ion-icon></div>
+                    <div class="stat-content">
+                        <div class="stat-value">{{ statistik[2]?.value | number }}</div>
+                        <div class="stat-label">Baru</div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-container">
+                <div class="table-header">
+                    <div class="table-title">
+                        <h3>Daftar Pelanggan</h3>
+                    </div>
+                </div>
+                <div class="table-content">
+                    <div class="table-headers">
+                        <div class="header-cell">No</div>
+                        <div class="header-cell">Nama</div>
+                        <div class="header-cell">Email</div>
+                        <div class="header-cell">Jenis Kelamin</div>
+                        <div class="header-cell">Tanggal Lahir</div>
+                        <div class="header-cell">Total Pesanan</div>
+                        <div class="header-cell">Total Belanja</div>
+                        <div class="header-cell">Status</div>
+                    </div>
+                    <div class="table-rows">
+                        <div class="table-row" *ngFor="let pelanggan of pelangganList; let i = index">
+                            <div class="row-cell">{{ i + 1 }}</div>
+                            <div class="row-cell">{{ pelanggan.name }}</div>
+                            <div class="row-cell">{{ pelanggan.email }}</div>
+                            <div class="row-cell">{{ pelanggan.gender | titlecase }}</div>
+                            <div class="row-cell">{{ pelanggan.birth_date | date:'dd/MM/yyyy' }}</div>
+                            <div class="row-cell">{{ pelanggan.total_orders }}</div>
+                            <div class="row-cell">{{ pelanggan.total_spent | currency:'IDR':'symbol':'1.0-0' }}</div>
+                            <div class="row-cell">
+                                <span class="badge" [ngClass]="{
+                                        'badge-success': pelanggan.status === 'active',
+                                        'badge-secondary': pelanggan.status !== 'active'
+                                    }">
+                                    {{ pelanggan.status === 'active' ? 'Aktif' : 'Tidak Aktif' }}
+                                </span>
+                            </div>
+                        </div>
+                        <div class="no-data" *ngIf="!pelangganList.length">
+                            <ion-icon name="people-outline"></ion-icon>
+                            <p>Tidak ada data pelanggan</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>

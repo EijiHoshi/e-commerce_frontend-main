@@ -1,0 +1,57 @@
+<ion-header class="custom-cart-header">
+    <div class="cart-header-bar">
+        <button class="back-btn" (click)="goBack()">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+        </button>
+        <div class="cart-header-title">Notifikasi</div>
+        <div class="cart-header-placeholder"></div>
+    </div>
+</ion-header>
+
+<ion-content>
+    <div *ngIf="!loading && notifications.length > 0" class="notifications-container">
+        <div *ngFor="let notification of notifications; let last = last" class="notification-row">
+            <div class="notification-item" [ngClass]="{'unread': notification.status === 'unread'}">
+                <div class="notification-header">
+                    <div class="notification-icon" [ngClass]="notification.type">
+                        <ion-icon [name]="getNotificationIcon(notification.type)"></ion-icon>
+                    </div>
+                    <div class="notification-info">
+                        <h3 class="notification-title">{{ notification.title }}</h3>
+                        <div class="notification-meta">
+                            <span class="notification-time">{{ notification.created_at | timeAgo }}</span>
+                            <span *ngIf="notification.status === 'unread'" class="badge-unread">Baru</span>
+                        </div>
+                    </div>
+                    <div class="notification-actions">
+                        <ion-button fill="clear" size="small" (click)="markAsRead(notification.id)"
+                            *ngIf="notification.status === 'unread'">
+                            <ion-icon name="checkmark-outline"></ion-icon>
+                        </ion-button>
+                    </div>
+                </div>
+                <div class="notification-message">
+                    {{ notification.message }}
+                </div>
+                <div class="notification-data" *ngIf="notification.data">
+                    <div *ngIf="notification.data.order_id" class="data-item">
+                        <strong>Order ID:</strong> #{{ notification.data.order_id }}
+                    </div>
+                    <div *ngIf="notification.data.payment_id" class="data-item">
+                        <strong>Payment ID:</strong> #{{ notification.data.payment_id }}
+                    </div>
+                </div>
+            </div>
+            <ion-item-divider *ngIf="!last"></ion-item-divider>
+        </div>
+    </div>
+
+    <div *ngIf="!loading && notifications.length === 0" class="empty-state">
+        <ion-icon name="notifications-outline" class="empty-icon"></ion-icon>
+        <h3>Tidak Ada Notifikasi</h3>
+        <p>Belum ada notifikasi yang diterima</p>
+    </div>
+
+    <ion-spinner *ngIf="loading" class="ion-margin"></ion-spinner>
+    <ion-text color="danger" *ngIf="error">{{ error }}</ion-text>
+</ion-content>

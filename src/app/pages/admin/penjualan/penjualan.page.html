@@ -1,0 +1,134 @@
+<app-admin-sidebar></app-admin-sidebar>
+<app-admin-header></app-admin-header>
+
+<div class="penjualan-main-content">
+  <div class="penjualan-container">
+    <!-- Header Section -->
+    <div class="header-section">
+      <div class="header-info">
+        <div class="page-title">Penjualan</div>
+        <div class="page-subtitle">Kelola semua transaksi penjualan Anda</div>
+      </div>
+    </div>
+
+    <!-- Statistik Cards -->
+    <div class="stats-cards">
+      <div class="stat-card">
+        <div class="stat-icon total"><ion-icon name="cart-outline"></ion-icon></div>
+        <div class="stat-content">
+          <div class="stat-value">{{ totalOrders }}</div>
+          <div class="stat-label">Total Pesanan</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon completed"><ion-icon name="checkmark-done-outline"></ion-icon></div>
+        <div class="stat-content">
+          <div class="stat-value">{{ completedOrders }}</div>
+          <div class="stat-label">Pesanan Selesai</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon pending"><ion-icon name="time-outline"></ion-icon></div>
+        <div class="stat-content">
+          <div class="stat-value">{{ pendingOrders }}</div>
+          <div class="stat-label">Menunggu Pembayaran</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon cancelled"><ion-icon name="close-circle-outline"></ion-icon></div>
+        <div class="stat-content">
+          <div class="stat-value">{{ cancelledOrders }}</div>
+          <div class="stat-label">Dibatalkan</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filters-section">
+      <div class="filter-group">
+        <label>Status</label>
+        <select [(ngModel)]="statusFilter" (change)="onStatusChange()">
+          <option *ngFor="let opt of statusOptions" [value]="opt.value">{{ opt.label }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="table-container">
+      <div class="table-header">
+        <div class="table-title">
+          <h3>Daftar Penjualan</h3>
+        </div>
+      </div>
+      <div class="table-content">
+        <div class="table-responsive">
+          <table class="table-penjualan">
+            <thead>
+              <tr>
+                <th class="no">NO</th>
+                <th>NAMA PEMBELI</th>
+                <th>TANGGAL</th>
+                <th>TOTAL</th>
+                <th>BUKTI TRANSFER</th>
+                <th>STATUS</th>
+                <th class="aksi">AKSI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of filteredPenjualan; let i = index">
+                <td class="no">{{ i + 1 }}</td>
+                <td>{{ p.user.name || '-' }}</td>
+                <td>{{ formatTanggal(p.created_at) }}</td>
+                <td>Rp {{ p.total_amount | number:'1.0-0' }}</td>
+                <td>
+                  <ng-container *ngIf="p.payment?.proof_of_payment; else noProof">
+                    <a [href]="api.getImageUrl(p.payment?.proof_of_payment!)" target="_blank">
+                      <img [src]="api.getImageUrl(p.payment?.proof_of_payment!)" alt="Bukti Transfer"
+                        style="max-width:48px;max-height:48px;border-radius:4px;border:1px solid #eee;" />
+                    </a>
+                  </ng-container>
+                  <ng-template #noProof>-</ng-template>
+                </td>
+                <td>
+                  <span [ngClass]="{
+                    'badge-status': true,
+                    'badge-warning': getStatus(p) === 'Menunggu Pembayaran' || getStatus(p) === 'Menunggu Konfirmasi',
+                    'badge-success': getStatus(p) === 'Diterima',
+                    'badge-danger': getStatus(p) === 'Dibatalkan',
+                    'badge-info': getStatus(p) === 'Diproses' || getStatus(p) === 'Dikirim'
+                  }">{{ getStatus(p) }}</span>
+                </td>
+                <td class="aksi">
+                  <ion-button size="small" fill="clear" color="primary" [routerLink]="['/admin/order-detail', p.id]">
+                    <ion-icon name="eye-outline"></ion-icon>
+                  </ion-button>
+                  <ion-button *ngIf="p.status === 'Menunggu Pembayaran'" size="small" color="success"
+                    (click)="onKonfirmasi(p)">
+                    <ion-icon name="checkmark-circle-outline"></ion-icon>
+                    Konfirmasi
+                  </ion-button>
+                  <ion-button *ngIf="p.status === 'Menunggu Pembayaran'" size="small" color="danger"
+                    (click)="onBatalkan(p)">
+                    <ion-icon name="close-circle-outline"></ion-icon>
+                    Batalkan
+                  </ion-button>
+                  <ion-button *ngIf="p.status === 'Diproses'" size="small" color="primary" (click)="onKirim(p)">
+                    <ion-icon name="cube-outline"></ion-icon>
+                    Kirim
+                  </ion-button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ion-alert header="Konfirmasi Order" message="Yakin ingin konfirmasi order ini?" [isOpen]="showConfirmAlert"
+  (didDismiss)="showConfirmAlert = false" [buttons]="confirmButtons">
+</ion-alert>
+<ion-alert header="Batalkan Order" message="Yakin ingin membatalkan order ini?" [isOpen]="showCancelAlert"
+  (didDismiss)="showCancelAlert = false" [buttons]="cancelButtons">
+</ion-alert>

@@ -1,0 +1,73 @@
+<ion-content class="home-content">
+    <div class="home-container">
+        <!-- Search Bar -->
+        <div class="search-bar-row">
+            <div class="search-bar-box">
+                <button class="search-icon-btn white" type="button"><ion-icon name="search-outline"></ion-icon></button>
+                <input type="text" [(ngModel)]="searchQuery" placeholder="Search"
+                    (ngModelChange)="onSearchChange($event)" />
+                <button class="search-icon-btn white" type="button"><ion-icon name="camera-outline"></ion-icon></button>
+                <button class="search-icon-btn white" type="button" (click)="goToNotifications()"><ion-icon
+                        name="notifications-outline"></ion-icon></button>
+            </div>
+        </div>
+        <!-- Banner Slider -->
+        <div class="banner-slider-row">
+            <div class="banner-slider">
+                <div class="banner-slide" *ngFor="let banner of banners; let i = index"
+                    [class.active]="i === bannerActiveIndex">
+                    <img [src]="getImageUrl(banner.image)" [alt]="banner.title" />
+                </div>
+                <div class="banner-indicators" *ngIf="banners.length > 1">
+                    <span *ngFor="let banner of banners; let i = index" [class.active]="i === bannerActiveIndex"
+                        (click)="setBannerIndex(i)"></span>
+                </div>
+            </div>
+        </div>
+        <!-- Category -->
+        <div class="category-section">
+            <div class="category-header">
+                <span class="category-title">Category</span>
+                <button class="see-all-btn">See All</button>
+            </div>
+            <div class="category-list-row">
+                <div class="category-item" *ngFor="let category of categories" (click)="onCategoryClick(category)">
+                    <div class="category-icon"><ion-icon [name]="getCategoryIcon(category.slug)"></ion-icon></div>
+                    <div class="category-label">{{category.name}}</div>
+                </div>
+            </div>
+        </div>
+        <!-- Recommend For You -->
+        <div class="recommend-section">
+            <div class="recommend-title">Recommend For You</div>
+            <div class="recommend-grid">
+                <div class="recommend-card" *ngFor="let product of recommendedProducts"
+                    (click)="goToProductDetail(product)">
+                    <div class="recommend-img-box">
+                        <img [src]="getImageUrl(product.image)" [alt]="product.name" />
+                    </div>
+                    <div class="recommend-info">
+                        <div class="recommend-name">{{product.name}}</div>
+                        <div class="recommend-price">Rp. {{product.price | number:'1.0-0'}}</div>
+                        <div class="recommend-rating"><ion-icon name="star"></ion-icon> <span>{{product.rating ||
+                                '4.5'}}</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="home-footer-spacer" style="height: 80px;"></div>
+    </div>
+    <!-- Bottom Nav -->
+    <div class="home-bottom-nav">
+        <div class="home-bottom-nav-inner">
+            <button class="nav-btn active" (click)="goToHome()"><span class="nav-icon-circle active"><ion-icon
+                        name="home"></ion-icon></span></button>
+            <button class="nav-btn" (click)="goToChat()"><span class="nav-icon-circle"><ion-icon
+                        name="chatbubble-ellipses-outline"></ion-icon></span></button>
+            <button class="nav-btn" (click)="goToCart()"><span class="nav-icon-circle"><ion-icon
+                        name="cart-outline"></ion-icon></span></button>
+            <button class="nav-btn" (click)="goToProfile()"><span class="nav-icon-circle"><ion-icon
+                        name="person-outline"></ion-icon></span></button>
+        </div>
+    </div>
+</ion-content>

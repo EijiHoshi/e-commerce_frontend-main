@@ -1,0 +1,78 @@
+<app-admin-sidebar></app-admin-sidebar>
+<app-admin-header></app-admin-header>
+<div class="laporan-main-content">
+    <div class="laporan-container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="header-info">
+                <div class="page-title">Laporan Keuangan</div>
+                <div class="page-subtitle">Rekap data keuangan penjualan dan pembayaran</div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-export"><ion-icon name="download-outline"></ion-icon> Export</button>
+            </div>
+        </div>
+
+        <!-- Statistik Cards -->
+        <div class="stats-cards" *ngIf="statistik">
+            <div class="stat-card">
+                <div class="stat-icon revenue"><ion-icon name="cash-outline"></ion-icon></div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ statistik.total_pendapatan | currency:'IDR':'symbol':'1.0-0' }}</div>
+                    <div class="stat-label">Total Pendapatan</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon growth"><ion-icon name="trending-up-outline"></ion-icon></div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ statistik.laba_bersih | currency:'IDR':'symbol':'1.0-0' }}</div>
+                    <div class="stat-label">Laba Bersih</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orders"><ion-icon name="pie-chart-outline"></ion-icon></div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ statistik.margin_laba_bersih }}%</div>
+                    <div class="stat-label">Margin Laba Bersih</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon customers"><ion-icon name="calendar-outline"></ion-icon></div>
+                <div class="stat-content">
+                    <div class="stat-value">{{ statistik.rata_rata_per_hari | currency:'IDR':'symbol':'1.0-0' }}</div>
+                    <div class="stat-label">Rata-rata per Hari</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Section -->
+        <div class="table-container">
+            <div class="table-content">
+                <div class="table-headers">
+                    <div class="header-cell no">NO</div>
+                    <div class="header-cell">TANGGAL</div>
+                    <div class="header-cell">ORDER ID</div>
+                    <div class="header-cell">USER ID</div>
+                    <div class="header-cell">TOTAL ORDER</div>
+                    <div class="header-cell">PEMBAYARAN</div>
+                    <div class="header-cell">STATUS</div>
+                </div>
+                <div class="table-rows">
+                    <div *ngIf="!transaksiList || transaksiList.length === 0" class="no-data">
+                        <ion-icon name="cube-outline"></ion-icon>
+                        <p>Tidak ada data transaksi keuangan</p>
+                    </div>
+                    <div *ngFor="let trx of transaksiList; let i = index" class="table-row">
+                        <div class="row-cell no">{{ i + 1 }}</div>
+                        <div class="row-cell">{{ trx.created_at | date:'dd/MM/yyyy' }}</div>
+                        <div class="row-cell">{{ trx.order_id }}</div>
+                        <div class="row-cell">{{ trx.user_id }}</div>
+                        <div class="row-cell">{{ trx.total_amount | currency:'IDR':'symbol':'1.0-0' }}</div>
+                        <div class="row-cell">{{ trx.payment_amount | currency:'IDR':'symbol':'1.0-0' }}</div>
+                        <div class="row-cell">{{ trx.status }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

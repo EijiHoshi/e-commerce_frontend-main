@@ -1,0 +1,48 @@
+<div class="sidebar">
+        <!-- Menu utama -->
+        <div class="menu-section">
+                <div class="menu-title">MENU UTAMA</div>
+                <a routerLink="/admin/dashboard" routerLinkActive="active"><ion-icon
+                                name="grid-outline"></ion-icon>Dashboard</a>
+                <a routerLink="/admin/produk" routerLinkActive="active"><ion-icon name="cube-outline"></ion-icon>Produk
+                        <span class="badge">{{ produkCount }}</span></a>
+                <a routerLink="/admin/penjualan" routerLinkActive="active"><ion-icon
+                                name="cart-outline"></ion-icon>Penjualan</a>
+                <a routerLink="/admin/chat-support" routerLinkActive="active"><ion-icon
+                                name="chatbubbles-outline"></ion-icon>Chat Support</a>
+                <a routerLink="/admin/stok" routerLinkActive="active"><ion-icon
+                                name="layers-outline"></ion-icon>Stok</a>
+                <a routerLink="/admin/laporan" routerLinkActive="active"><ion-icon
+                                name="document-text-outline"></ion-icon>Laporan</a>
+                <a routerLink="/admin/pelanggan" routerLinkActive="active"><ion-icon
+                                name="people-outline"></ion-icon>Pelanggan</a>
+                <a routerLink="/admin/metode-pembayaran" routerLinkActive="active">
+                        <ion-icon name="card-outline"></ion-icon>Metode Pembayaran
+                </a>
+                <ion-item routerLink="/notifications" routerDirection="forward">
+                        <ion-icon name="notifications-outline" slot="start"></ion-icon>
+                        <ion-label>Notifikasi</ion-label>
+                </ion-item>
+        </div>
+
+        <!-- Analytics section / Jenis Laporan -->
+        <div class="menu-section" *ngIf="isLaporan">
+                <div class="menu-title">JENIS LAPORAN</div>
+                <a *ngFor="let menu of laporanMenus" [routerLink]="menu.path" routerLinkActive="active">
+                        <ion-icon [ngSwitch]="menu.label"
+                                [name]="menu.label === 'Penjualan' ? 'cart-outline' : menu.label === 'Produk' ? 'cube-outline' : menu.label === 'Pelanggan' ? 'people-outline' : menu.label === 'Keuangan' ? 'card-outline' : 'document-text-outline'">
+                        </ion-icon>
+                        {{ menu.label }}
+                </a>
+        </div>
+
+        <!-- Profile admin di bawah -->
+        <div class="sidebar-profile">
+                <div class="profile-avatar">{{ userInitials }}</div>
+                <div class="profile-info">
+                        <div class="profile-name">{{ name }}</div>
+                        <div class="profile-email">{{ email }}</div>
+                </div>
+                <ion-icon name="settings-outline"></ion-icon>
+        </div>
+</div>

@@ -1,0 +1,179 @@
+<app-admin-sidebar></app-admin-sidebar>
+<app-admin-header></app-admin-header>
+
+<div class="dashboard-main-content">
+  <div class="dashboard-container">
+    <!-- Stats Cards Section -->
+    <div class="stats-cards">
+      <!-- Total Orders Card -->
+      <div class="stat-card">
+        <div class="card-header">
+          <div class="icon-container total-orders">
+            <ion-icon name="bag-outline"></ion-icon>
+          </div>
+          <div class="card-info">
+            <h3 class="card-title">Total Orders</h3>
+            <p class="card-subtitle">Semua pesanan</p>
+          </div>
+        </div>
+        <div class="card-content">
+          <h2 class="card-value">{{ dashboardData?.total_orders || 0 }}</h2>
+          <div class="card-trend" [ngClass]="{
+              'positive': dashboardData?.total_orders_growth > 0,
+              'negative': dashboardData?.total_orders_growth < 0,
+              'neutral': !dashboardData?.total_orders_growth && dashboardData?.total_orders_growth !== null && dashboardData?.total_orders_growth !== undefined
+            }">
+            <ion-icon [name]="
+              dashboardData?.total_orders_growth > 0 ? 'trending-up-outline' :
+              (dashboardData?.total_orders_growth < 0 ? 'trending-down-outline' : 'remove-outline')
+            "></ion-icon>
+            <span>
+              {{ dashboardData?.total_orders_growth !== null && dashboardData?.total_orders_growth !== undefined ?
+              (dashboardData.total_orders_growth > 0 ? '+' : '') + dashboardData.total_orders_growth + '%' : '-' }} dari
+              bulan lalu
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pending Orders Card -->
+      <div class="stat-card">
+        <div class="card-header">
+          <div class="icon-container pending">
+            <ion-icon name="time-outline"></ion-icon>
+          </div>
+          <div class="card-info">
+            <h3 class="card-title">Pending</h3>
+            <p class="card-subtitle">Menunggu pembayaran</p>
+          </div>
+        </div>
+        <div class="card-content">
+          <h2 class="card-value">{{ dashboardData?.pending_orders || 0 }}</h2>
+          <div class="card-trend" [ngClass]="{
+              'positive': dashboardData?.pending_orders_growth > 0,
+              'negative': dashboardData?.pending_orders_growth < 0,
+              'neutral': !dashboardData?.pending_orders_growth && dashboardData?.pending_orders_growth !== null && dashboardData?.pending_orders_growth !== undefined
+            }">
+            <ion-icon [name]="
+              dashboardData?.pending_orders_growth > 0 ? 'trending-up-outline' :
+              (dashboardData?.pending_orders_growth < 0 ? 'trending-down-outline' : 'remove-outline')
+            "></ion-icon>
+            <span>
+              {{ dashboardData?.pending_orders_growth !== null && dashboardData?.pending_orders_growth !== undefined ?
+              (dashboardData.pending_orders_growth > 0 ? '+' : '') + dashboardData.pending_orders_growth + '%' : '-' }}
+              dari kemarin
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Processing Orders Card -->
+      <div class="stat-card">
+        <div class="card-header">
+          <div class="icon-container processing">
+            <ion-icon name="settings-outline"></ion-icon>
+          </div>
+          <div class="card-info">
+            <h3 class="card-title">Processing</h3>
+            <p class="card-subtitle">Sedang diproses</p>
+          </div>
+        </div>
+        <div class="card-content">
+          <h2 class="card-value">{{ dashboardData?.processing_orders || 0 }}</h2>
+          <div class="card-trend" [ngClass]="{
+              'positive': dashboardData?.processing_orders_growth > 0,
+              'negative': dashboardData?.processing_orders_growth < 0,
+              'neutral': !dashboardData?.processing_orders_growth && dashboardData?.processing_orders_growth !== null && dashboardData?.processing_orders_growth !== undefined
+            }">
+            <ion-icon [name]="
+              dashboardData?.processing_orders_growth > 0 ? 'trending-up-outline' :
+              (dashboardData?.processing_orders_growth < 0 ? 'trending-down-outline' : 'remove-outline')
+            "></ion-icon>
+            <span>
+              {{ dashboardData?.processing_orders_growth !== null && dashboardData?.processing_orders_growth !==
+              undefined ? (dashboardData.processing_orders_growth > 0 ? '+' : '') +
+              dashboardData.processing_orders_growth + '%' : '-' }} dari kemarin
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Delivered Orders Card -->
+      <div class="stat-card">
+        <div class="card-header">
+          <div class="icon-container delivered">
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+          </div>
+          <div class="card-info">
+            <h3 class="card-title">Delivered</h3>
+            <p class="card-subtitle">Sudah diterima</p>
+          </div>
+        </div>
+        <div class="card-content">
+          <h2 class="card-value">{{ dashboardData?.delivered_orders || 0 }}</h2>
+          <div class="card-trend" [ngClass]="{
+              'positive': dashboardData?.delivered_orders_growth > 0,
+              'negative': dashboardData?.delivered_orders_growth < 0,
+              'neutral': !dashboardData?.delivered_orders_growth && dashboardData?.delivered_orders_growth !== null && dashboardData?.delivered_orders_growth !== undefined
+            }">
+            <ion-icon [name]="
+              dashboardData?.delivered_orders_growth > 0 ? 'trending-up-outline' :
+              (dashboardData?.delivered_orders_growth < 0 ? 'trending-down-outline' : 'remove-outline')
+            "></ion-icon>
+            <span>
+              {{ dashboardData?.delivered_orders_growth !== null && dashboardData?.delivered_orders_growth !== undefined
+              ? (dashboardData.delivered_orders_growth > 0 ? '+' : '') + dashboardData.delivered_orders_growth + '%' :
+              '-' }} dari kemarin
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Orders Table Section -->
+    <div class="orders-table-container">
+      <div class="table-header">
+        <div class="table-title">
+          <h3>Recent Orders</h3>
+        </div>
+        <div class="table-actions">
+          <ion-button fill="clear" size="small">
+            <ion-icon name="eye-outline"></ion-icon>
+            View All
+          </ion-button>
+        </div>
+      </div>
+
+      <div class="table-content">
+        <div class="table-headers">
+          <div class="header-cell">Order ID</div>
+          <div class="header-cell">Customer</div>
+          <div class="header-cell">Product</div>
+          <div class="header-cell">Amount</div>
+          <div class="header-cell">Status</div>
+          <div class="header-cell">Date</div>
+        </div>
+
+        <div class="table-rows">
+          <div class="table-row" *ngFor="let order of recentOrders">
+            <div class="row-cell">#{{ order.id }}</div>
+            <div class="row-cell">{{ order.user?.name || 'N/A' }}</div>
+            <div class="row-cell">{{ getProductNames(order) }}</div>
+            <div class="row-cell">Rp {{ order.total_amount | number:'1.0-0' }}</div>
+            <div class="row-cell">
+              <span class="status-badge" [ngClass]="getStatusClass(order.status)">
+                {{ order.status }}
+              </span>
+            </div>
+            <div class="row-cell">{{ order.created_at | date:'short' }}</div>
+          </div>
+
+          <div class="no-data" *ngIf="!recentOrders || recentOrders.length === 0">
+            <ion-icon name="document-outline"></ion-icon>
+            <p>Tidak ada pesanan terbaru</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

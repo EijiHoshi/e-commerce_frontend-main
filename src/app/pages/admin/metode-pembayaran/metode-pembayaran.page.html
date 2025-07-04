@@ -1,0 +1,98 @@
+<app-admin-sidebar></app-admin-sidebar>
+<app-admin-header></app-admin-header>
+<div class="metode-main-content">
+    <div class="metode-container">
+        <!-- Header Section -->
+        <div class="header-section">
+            <div class="header-info">
+                <div class="page-title">Metode Pembayaran</div>
+                <div class="page-subtitle">Kelola semua metode pembayaran yang tersedia di toko Anda</div>
+            </div>
+            <div class="header-actions">
+                <ion-button color="primary" (click)="tambah()">Tambah Metode</ion-button>
+            </div>
+        </div>
+        <!-- Statistik Cards (opsional, bisa dikembangkan) -->
+        <!-- <div class="stats-cards"></div> -->
+        <!-- Table Section -->
+        <div class="table-container">
+            <div class="table-header">
+                <div class="table-title">
+                    <h3>Daftar Metode Pembayaran</h3>
+                </div>
+            </div>
+            <div class="table-content">
+                <div class="table-responsive">
+                    <table class="table-metode">
+                        <thead>
+                            <tr>
+                                <th>NO</th>
+                                <th>NAMA</th>
+                                <th>KODE</th>
+                                <th>TIPE</th>
+                                <th>STATUS</th>
+                                <th>AKSI</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let m of metodePembayaran; let i = index">
+                                <td>{{ i + 1 }}</td>
+                                <td>{{ m.name }}</td>
+                                <td>{{ m.code }}</td>
+                                <td>{{ m.type }}</td>
+                                <td>
+                                    <ion-toggle [checked]="m.is_active" (ionChange)="toggleAktif(m)"></ion-toggle>
+                                    <span *ngIf="m.is_active" class="badge badge-success">Aktif</span>
+                                    <span *ngIf="!m.is_active" class="badge badge-danger">Nonaktif</span>
+                                </td>
+                                <td>
+                                    <ion-button size="small" fill="clear" color="primary"
+                                        (click)="edit(m)">Edit</ion-button>
+                                    <ion-button size="small" fill="clear" color="danger"
+                                        (click)="hapus(m.id)">Hapus</ion-button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <ion-modal *ngIf="showForm" [isOpen]="showForm" (didDismiss)="showForm = false">
+            <ng-template>
+                <ion-header>
+                    <ion-toolbar color="light">
+                        <ion-title>{{ editMode ? 'Edit' : 'Tambah' }} Metode Pembayaran</ion-title>
+                        <ion-buttons slot="end">
+                            <ion-button (click)="showForm = false">Tutup</ion-button>
+                        </ion-buttons>
+                    </ion-toolbar>
+                </ion-header>
+                <ion-content>
+                    <form (ngSubmit)="simpan()">
+                        <ion-list lines="full">
+                            <ion-item>
+                                <ion-label position="stacked">Nama</ion-label>
+                                <ion-input [(ngModel)]="form.name" name="name" required></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label position="stacked">Kode</ion-label>
+                                <ion-input [(ngModel)]="form.code" name="code" required></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label position="stacked">Tipe</ion-label>
+                                <ion-input [(ngModel)]="form.type" name="type" required></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label>Aktif</ion-label>
+                                <ion-toggle [(ngModel)]="form.is_active" name="is_active"></ion-toggle>
+                            </ion-item>
+                        </ion-list>
+                        <ion-footer>
+                            <ion-button expand="block" type="submit" [disabled]="loading">Simpan</ion-button>
+                        </ion-footer>
+                    </form>
+                </ion-content>
+            </ng-template>
+        </ion-modal>
+    </div>
+</div>

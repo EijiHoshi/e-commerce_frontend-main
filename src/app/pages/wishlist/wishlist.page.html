@@ -1,0 +1,53 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/home"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Wishlist</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div *ngIf="!loading && wishlistItems.length > 0" class="wishlist-container">
+        <ion-card *ngFor="let item of wishlistItems" class="wishlist-item">
+            <ion-card-content>
+                <div class="product-row">
+                    <div class="product-image">
+                        <img [src]="api.getImageUrl(item.product.image)" [alt]="item.product.name" />
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">{{ item.product.name }}</h3>
+                        <p class="product-price">Rp{{ item.product.price | number:'1.0-0' }}</p>
+                        <p class="product-stock"
+                            [ngClass]="{'in-stock': item.product.stock > 0, 'out-of-stock': item.product.stock <= 0}">
+                            {{ item.product.stock > 0 ? 'Stok tersedia' : 'Stok habis' }}
+                        </p>
+                        <div class="product-actions">
+                            <ion-button size="small" color="primary" (click)="addToCart(item.product)"
+                                [disabled]="item.product.stock <= 0">
+                                <ion-icon name="cart-outline" slot="start"></ion-icon>
+                                Add to Cart
+                            </ion-button>
+                            <ion-button size="small" color="danger" (click)="removeFromWishlist(item.id)">
+                                <ion-icon name="trash-outline" slot="start"></ion-icon>
+                                Remove
+                            </ion-button>
+                        </div>
+                    </div>
+                </div>
+            </ion-card-content>
+        </ion-card>
+    </div>
+
+    <div *ngIf="!loading && wishlistItems.length === 0" class="empty-state">
+        <ion-icon name="heart-outline" class="empty-icon"></ion-icon>
+        <h3>Wishlist Kosong</h3>
+        <p>Belum ada produk yang ditambahkan ke wishlist</p>
+        <ion-button color="primary" (click)="goToHome()">
+            Mulai Belanja
+        </ion-button>
+    </div>
+
+    <ion-spinner *ngIf="loading" class="ion-margin"></ion-spinner>
+    <ion-text color="danger" *ngIf="error">{{ error }}</ion-text>
+</ion-content>

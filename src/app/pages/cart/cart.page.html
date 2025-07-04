@@ -1,0 +1,94 @@
+<ion-header class="custom-cart-header">
+    <div class="cart-header-bar">
+        <button class="back-btn" (click)="goBack()">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+        </button>
+        <div class="cart-header-title">Cart</div>
+        <div class="cart-header-placeholder"></div>
+    </div>
+</ion-header>
+<ion-content class="cart-content">
+    <div class="container">
+        <div *ngIf="loading" class="loading-container">
+            <ion-spinner name="crescent"></ion-spinner>
+        </div>
+        <ng-container *ngIf="!loading">
+            <div *ngIf="cartItems.length === 0" class="empty-cart">
+                <ion-icon name="cart-outline"></ion-icon>
+                <h2>Keranjang Belanja Kosong</h2>
+                <p>Yuk, belanja produk favoritmu!</p>
+            </div>
+            <div *ngIf="cartItems.length > 0" class="cart-list">
+                <ion-list lines="none">
+                    <ion-item-sliding *ngFor="let item of cartItems">
+                        <ion-item class="cart-item-row">
+                            <div class="cart-img">
+                                <img [src]="item.product?.image ? apiService.getImageUrl(item.product.image) : ''"
+                                    [alt]="item.product?.name" />
+                            </div>
+                            <div class="cart-info">
+                                <div class="cart-title">{{item.product?.name}}</div>
+                                <div class="cart-variant" *ngIf="item.variant">Size : {{item.variant.size}} |
+                                    {{item.variant.color}}</div>
+                                <div class="cart-price">IDR {{item.product?.price | number:'1.0-0'}}</div>
+                            </div>
+                            <div class="cart-qty-group">
+                                <button class="qty-btn minus" (click)="decrementQty(item)"><ion-icon
+                                        name="remove-outline"></ion-icon></button>
+                                <span class="qty-value">{{item.quantity}}</span>
+                                <button class="qty-btn plus" (click)="incrementQty(item)"><ion-icon
+                                        name="add-outline"></ion-icon></button>
+                            </div>
+                        </ion-item>
+                        <ion-item-options side="end">
+                            <ion-item-option color="danger" expandable (click)="openDeleteModal(item)">
+                                <ion-icon name="trash" slot="icon-only"></ion-icon>
+                            </ion-item-option>
+                        </ion-item-options>
+                    </ion-item-sliding>
+                </ion-list>
+            </div>
+        </ng-container>
+    </div>
+    <div class="cart-footer">
+        <div class="cart-divider"></div>
+        <div class="cart-summary-info">
+            <span class="cart-items-label">Items : ({{cartItems.length}})</span>
+            <span class="cart-total-label">Total : IDR {{total | number:'1.0-0'}}</span>
+        </div>
+        <ion-button expand="block" class="big-checkout" [disabled]="cartItems.length === 0" (click)="checkout()">
+            Checkout
+        </ion-button>
+    </div>
+    <ion-modal [isOpen]="showDeleteModal" class="delete-modal" (didDismiss)="showDeleteModal = false"
+        backdropDismiss="true">
+        <ng-template>
+            <div class="delete-modal-sheet">
+                <div class="delete-modal-title">Delete from Cart?</div>
+                <div class="delete-modal-product-row" *ngIf="itemToDelete">
+                    <img [src]="itemToDelete.product?.image ? apiService.getImageUrl(itemToDelete.product.image) : ''"
+                        [alt]="itemToDelete.product?.name" class="delete-modal-product-img" />
+                    <div class="delete-modal-product-info">
+                        <div class="delete-modal-product-name">{{itemToDelete.product?.name}}</div>
+                        <div class="delete-modal-product-variant" *ngIf="itemToDelete.variant">{{itemToDelete.variant}}
+                        </div>
+                        <div class="delete-modal-product-price">IDR {{itemToDelete.product?.price | number:'1.0-0'}}
+                        </div>
+                    </div>
+                    <div class="delete-modal-qty-group">
+                        <button class="qty-btn minus" (click)="decrementQty(itemToDelete)"><ion-icon
+                                name="remove"></ion-icon></button>
+                        <span class="qty-value">{{itemToDelete.quantity}}</span>
+                        <button class="qty-btn plus" (click)="incrementQty(itemToDelete)"><ion-icon
+                                name="add"></ion-icon></button>
+                    </div>
+                </div>
+                <div class="delete-modal-divider"></div>
+                <div class="delete-modal-actions">
+                    <button class="delete-cancel-btn" (click)="showDeleteModal = false">Cancel</button>
+                    <button class="delete-confirm-btn" (click)="confirmDelete()">Delete</button>
+                </div>
+            </div>
+        </ng-template>
+    </ion-modal>
+</ion-content>

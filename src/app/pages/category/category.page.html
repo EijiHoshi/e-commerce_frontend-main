@@ -1,0 +1,30 @@
+<ion-header>
+    <ion-toolbar color="light">
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/home" text="" icon="chevron-back-outline"></ion-back-button>
+        </ion-buttons>
+        <ion-title>Kategori</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <div class="container">
+        <div *ngIf="loading" class="loading-container">
+            <ion-spinner name="crescent"></ion-spinner>
+        </div>
+        <div *ngIf="!loading && categories?.length" class="category-grid">
+            <div class="category-card" *ngFor="let cat of categories" (click)="goToCategory(cat)">
+                <div class="category-img-box">
+                    <img [src]="getImageUrl(cat.image)" [alt]="cat.name">
+                </div>
+                <div class="category-info">
+                    <h3 class="category-title">{{cat.name}}</h3>
+                    <div class="category-desc">{{cat.description}}</div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!loading && (!categories || !categories.length)" class="empty-state">
+            <p>Tidak ada kategori ditemukan.</p>
+        </div>
+    </div>
+</ion-content>

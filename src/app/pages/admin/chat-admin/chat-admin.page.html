@@ -1,0 +1,81 @@
+<div class="admin-chat-wrapper">
+    <app-admin-sidebar></app-admin-sidebar>
+    <div class="admin-chat-main">
+        <app-admin-header></app-admin-header>
+        <div class="page-title-section">
+            <h1 class="main-title">Customer Chats</h1>
+            <div class="subtitle">Kelola percakapan pelanggan yang masuk ke toko Anda</div>
+        </div>
+        <div class="card chat-card-wrapper">
+            <section class="chat-section">
+                <!-- Sidebar Chat List -->
+                <div class="chat-list">
+                    <div class="chat-list-title">Customer Chats</div>
+                    <div class="chat-list-header">
+                        <input type="text" class="chat-search" placeholder="Search conversations..."
+                            [(ngModel)]="searchTerm" (input)="onSearchChange()" />
+                        <div class="chat-tabs">
+                            <span class="tab active">All ({{ chats.length }})</span>
+                            <span class="tab">Unread ({{ unreadCount }})</span>
+                            <span class="tab">Urgent (0)</span>
+                        </div>
+                    </div>
+                    <ul>
+                        <li *ngFor="let chat of chats" [class.active]="selectedChat?.id === chat.id"
+                            (click)="selectChat(chat)">
+                            <div class="avatar" [ngStyle]="{'background': chat.color || '#ffe066'}">{{
+                                getInitials(chat.user?.name) }}</div>
+                            <div class="chat-info">
+                                <div class="chat-title-row">
+                                    <span class="chat-user">{{ chat.user?.name }}</span>
+                                    <span class="chat-time">{{ chat.last_time | date:'shortTime' }}</span>
+                                </div>
+                                <div class="chat-last-message">{{ chat.messages[0]?.message || '-' }}</div>
+                            </div>
+                            <span class="badge-unread" *ngIf="chat.unread_count">{{ chat.unread_count }}</span>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Chat Content -->
+                <div class="chat-content">
+                    <div *ngIf="!selectedChat" class="empty-state">Pilih chat untuk mulai percakapan</div>
+                    <div *ngIf="selectedChat">
+                        <div class="chat-content-header">
+                            <div class="avatar" [ngStyle]="{'background': selectedChat.color || '#ffe066'}">{{
+                                getInitials(selectedChat.user?.name) }}</div>
+                            <div class="chat-user-info">
+                                <div class="chat-user">{{ selectedChat.user?.name }}</div>
+                                <div class="chat-status">
+                                    <span class="status-dot"></span> Online • Customer since 2023
+                                </div>
+                            </div>
+                        </div>
+                        <div class="messages-list">
+                            <div *ngIf="loadingMessages" class="loading">Loading messages...</div>
+                            <ng-container *ngFor="let msg of messages">
+                                <div class="bubble-row"
+                                    [ngClass]="{'me': msg.sender_id === 1, 'other': msg.sender_id !== 1}">
+                                    <div class="bubble">
+                                        <div class="sender">{{ msg.sender?.name || (msg.sender_id === 1 ? 'Admin' :
+                                            'User')
+                                            }}</div>
+                                        <div class="message">{{ msg.message }}</div>
+                                        <div class="time">{{ msg.created_at | date:'shortTime' }}</div>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </div>
+                        <form (ngSubmit)="sendMessage()" class="send-form">
+                            <button type="button" class="icon-btn"><ion-icon name="happy-outline"></ion-icon></button>
+                            <input [(ngModel)]="newMessage" name="message" placeholder="Type your message..."
+                                [disabled]="sending" required />
+                            <button type="submit" class="send-btn" [disabled]="sending || !newMessage.trim()">
+                                <ion-icon name="send"></ion-icon>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>

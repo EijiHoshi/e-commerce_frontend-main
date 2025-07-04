@@ -1,0 +1,44 @@
+<ion-content class="chat-content">
+  <!-- Header Custom -->
+  <div class="chat-header">
+    <button class="chat-back-btn" (click)="goBack()">
+      <ion-icon name="chevron-back-outline"></ion-icon>
+    </button>
+    <div class="chat-header-info">
+      <div class="chat-header-avatar">CS</div>
+      <div class="chat-header-user">
+        <div class="chat-header-name">Customer Service</div>
+        <div class="chat-header-status">Online</div>
+      </div>
+    </div>
+    <div class="chat-header-actions">
+      <ion-icon name="call-outline"></ion-icon>
+      <ion-icon name="ellipsis-vertical-outline"></ion-icon>
+    </div>
+  </div>
+
+  <!-- Area Pesan -->
+  <div class="chat-messages">
+    <div *ngIf="messages.length === 0" class="chat-placeholder">
+      <ion-icon name="chatbubble-ellipses-outline"></ion-icon>
+      <div>Belum ada percakapan.<br>Mulai chat dengan admin untuk bertanya atau konsultasi.</div>
+    </div>
+    <div *ngFor="let msg of messages"
+      [ngClass]="{'chat-bubble-right': msg.sender_id === userId, 'chat-bubble-left': msg.sender_id !== userId}">
+      <div class="chat-bubble">
+        <span class="chat-bubble-text">{{msg.message}}</span>
+        <span class="chat-bubble-time">{{msg.created_at | date:'shortTime'}}</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input Pesan -->
+  <form class="chat-input-row" (ngSubmit)="sendMessage()">
+    <input type="text" [(ngModel)]="newMessage" name="newMessage" placeholder="Tulis pesan..." required
+      [disabled]="sending" />
+    <button type="submit" [disabled]="sending || !newMessage.trim()">
+      <ion-icon *ngIf="!sending" name="send"></ion-icon>
+      <ion-spinner *ngIf="sending" name="crescent"></ion-spinner>
+    </button>
+  </form>
+</ion-content>

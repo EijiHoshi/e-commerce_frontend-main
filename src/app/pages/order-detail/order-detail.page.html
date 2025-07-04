@@ -1,0 +1,132 @@
+<ion-header>
+    <ion-toolbar color="light">
+        <ion-title class="main-title">Detail Pesanan</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content *ngIf="!loading && order">
+    <ion-card class="order-info-card card-shadow">
+        <ion-card-header>
+            <ion-card-title>
+                <span class="order-id">#{{ order.id }}</span>
+                <span class="status-badge" [ngClass]="{
+                    'badge-pending': order.status === 'Menunggu Pembayaran',
+                    'badge-processed': order.status === 'Diproses',
+                    'badge-shipped': order.status === 'Dikirim',
+                    'badge-done': order.status === 'Diterima',
+                    'badge-cancel': order.status === 'Dibatalkan'
+                }">{{ order.status }}</span>
+            </ion-card-title>
+            <ion-card-subtitle>Tanggal: {{ order.created_at | date:'medium' }}</ion-card-subtitle>
+        </ion-card-header>
+        <ion-card-content>
+            <div class="order-info-row"><strong>Total:</strong> Rp{{ order.total_amount | number:'1.0-0' }}</div>
+            <div class="order-info-row"><strong>Alamat Pengiriman:</strong></div>
+            <div class="order-address-box">
+                <div *ngIf="order.address">
+                    {{ order.address.name }}<br>
+                    {{ order.address.phone }}<br>
+                    {{ order.address.street_address }}, {{ order.address.district }},<br>
+                    {{ order.address.city }}, {{ order.address.province }}, {{ order.address.postal_code }}<br>
+                    <span *ngIf="order.address.detail">({{ order.address.detail }})</span>
+                </div>
+                <div *ngIf="!order.address">-</div>
+            </div>
+            <div class="order-info-row"><strong>Metode Pembayaran:</strong> {{ order.payment?.payment_method?.name ||
+                '-' }}</div>
+            <div class="order-info-row"><strong>Status Pembayaran:</strong> {{ order.payment?.status || '-' }}</div>
+        </ion-card-content>
+    </ion-card>
+
+    <ion-card class="order-products-card card-shadow">
+        <ion-card-header>
+            <ion-card-title>Daftar Produk</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <div class="order-product-list">
+                <div class="order-product-item" *ngFor="let item of order.order_items">
+                    <div class="order-product-img-box">
+                        <img [src]="item.product?.image ? api.getImageUrl(item.product.image) : 'assets/img/placeholder.png'"
+                            alt="{{ item.product?.name }}" />
+                    </div>
+                    <div class="order-product-info">
+                        <div class="order-product-name">{{ item.product?.name }}</div>
+                        <div class="order-product-qty">Qty: {{ item.quantity }}</div>
+                        <div class="order-product-price">Harga: Rp{{ item.price | number:'1.0-0' }}</div>
+                    </div>
+                </div>
+            </div>
+        </ion-card-content>
+    </ion-card>
+
+    <div *ngIf="order.payment && order.payment.status === 'pending' && !order.payment.proof_of_payment">
+        <ion-card class="ion-margin card-shadow">
+            <ion-card-header>
+                <ion-card-title>Upload Bukti Transfer</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <input type="file" accept="image/*" (change)="onFileSelected($event)" [disabled]="uploading">
+                <div *ngIf="proofPreview" class="ion-margin-top">
+                    <img [src]="proofPreview" style="max-width: 100%; max-height: 200px; border-radius: 8px;" />
+                </div>
+                <ion-button expand="block" color="primary" (click)="uploadProof()" [disabled]="!proofFile || uploading"
+                    class="ion-margin-top">
+                    <ion-spinner *ngIf="uploading" name="dots"></ion-spinner>
+                    <span *ngIf="!uploading">Upload Bukti</span>
+                </ion-button>
+                <ion-text color="success" *ngIf="uploadSuccess">{{ uploadSuccess }}</ion-text>
+                <ion-text color="danger" *ngIf="uploadError">{{ uploadError }}</ion-text>
+            </ion-card-content>
+        </ion-card>
+    </div>
+    <div *ngIf="order.payment?.proof_of_payment">
+        <ion-card class="ion-margin card-shadow">
+            <ion-card-header>
+                <ion-card-title>Bukti Transfer</ion-card-title>
+            </ion-card-header>
+            <ion-card-content>
+                <img [src]="api.getImageUrl(order.payment.proof_of_payment)"
+                    style="max-width: 100%; max-height: 200px; border-radius: 8px;" />
+            </ion-card-content>
+        </ion-card>
+    </div>
+
+    <!-- Order Tracking -->
+    <ion-card class="ion-margin card-shadow">
+        <ion-card-header>
+            <ion-card-title>Status Pengiriman</ion-card-title>
+        </ion-card-header>
+        <ion-card-content>
+            <div class="tracking-timeline" *ngIf="trackingData.length > 0">
+                <div class="timeline-item" *ngFor="let item of trackingData; let i = index"
+                    [ngClass]="{'active': i === 0, 'completed': i > 0}">
+                    <div class="timeline-icon">
+                        <ion-icon [name]="getTrackingIcon(item.status)"></ion-icon>
+                    </div>
+                    <div class="timeline-content">
+                        <div class="timeline-title">{{ item.status }}</div>
+                        <div class="timeline-description">{{ item.description }}</div>
+                        <div class="timeline-location" *ngIf="item.location">{{ item.location }}</div>
+                        <div class="timeline-time">{{ item.created_at | date:'medium' }}</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="no-tracking" *ngIf="trackingData.length === 0">
+                <p>Belum ada informasi tracking untuk pesanan ini</p>
+            </div>
+        </ion-card-content>
+    </ion-card>
+
+    <div *ngIf="order.status === 'Dikirim'" class="pesanan-diterima-btn-wrapper">
+        <ion-button class="btn-pesanan-diterima" expand="block" color="warning" (click)="konfirmasiDiterima()">
+            <ion-icon name="checkmark-circle-outline"></ion-icon>
+            Pesanan Diterima
+        </ion-button>
+    </div>
+
+    <ion-toast></ion-toast>
+</ion-content>
+
+<ion-spinner *ngIf="loading" class="ion-margin"></ion-spinner>
+<ion-text color="danger" *ngIf="error">{{ error }}</ion-text>

@@ -1,0 +1,87 @@
+<ion-header class="custom-cart-header">
+    <div class="cart-header-bar">
+        <button class="back-btn" (click)="goBack()">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+        </button>
+        <div class="cart-header-title">Profile</div>
+        <div class="cart-header-placeholder"></div>
+    </div>
+</ion-header>
+<ion-content class="profile-content">
+    <ng-container *ngIf="loading">
+        <div class="profile-loading-spinner">
+            <ion-spinner name="crescent"></ion-spinner>
+        </div>
+    </ng-container>
+    <ng-container *ngIf="!loading">
+        <div class="profile-container">
+            <!-- Header -->
+            <div class="profile-header">
+                <button class="back-btn" (click)="goBack()">
+                    <ion-icon name="chevron-back-outline"></ion-icon>
+                </button>
+                <div class="profile-title">Profile</div>
+            </div>
+            <!-- Foto Profil -->
+            <div class="profile-photo-box">
+                <ng-container *ngIf="userPhoto; else defaultAvatar">
+                    <img [src]="userPhoto" alt="Foto Profil" class="profile-photo" />
+                </ng-container>
+                <ng-template #defaultAvatar>
+                    <div class="profile-photo default">
+                        <ion-icon name="person"></ion-icon>
+                    </div>
+                </ng-template>
+                <button class="edit-photo-btn"><ion-icon name="create-outline"></ion-icon></button>
+            </div>
+            <div class="profile-username">{{ userName }}</div>
+            <!-- Menu List -->
+            <div class="profile-menu-list">
+                <button class="profile-menu-item" (click)="goToProfileDetail()">
+                    <span class="menu-icon"><ion-icon name="person-outline"></ion-icon></span>
+                    <span class="menu-title">Your Profile</span>
+                    <span class="menu-arrow"><ion-icon name="chevron-forward-outline"></ion-icon></span>
+                </button>
+                <button class="profile-menu-item" (click)="goToOrders()">
+                    <span class="menu-icon"><ion-icon name="document-text-outline"></ion-icon></span>
+                    <span class="menu-title">My Orders</span>
+                    <span class="menu-arrow"><ion-icon name="chevron-forward-outline"></ion-icon></span>
+                </button>
+                <button class="profile-menu-item" (click)="goToSettings()">
+                    <span class="menu-icon"><ion-icon name="settings-outline"></ion-icon></span>
+                    <span class="menu-title">Settings</span>
+                    <span class="menu-arrow"><ion-icon name="chevron-forward-outline"></ion-icon></span>
+                </button>
+                <button class="profile-menu-item" (click)="showLogoutModal = true">
+                    <span class="menu-icon"><ion-icon name="log-out-outline"></ion-icon></span>
+                    <span class="menu-title">Log Out</span>
+                    <span class="menu-arrow"><ion-icon name="chevron-forward-outline"></ion-icon></span>
+                </button>
+            </div>
+            <div class="profile-footer-spacer" style="height: 90px;"></div>
+        </div>
+        <!-- Bottom Nav -->
+        <div class="home-bottom-nav">
+            <div class="home-bottom-nav-inner">
+                <button class="nav-btn" (click)="goToHome()"><span class="nav-icon-circle"><ion-icon
+                            name="home"></ion-icon></span></button>
+                <button class="nav-btn" (click)="goToChat()"><span class="nav-icon-circle"><ion-icon
+                            name="chatbubble-ellipses-outline"></ion-icon></span></button>
+                <button class="nav-btn" (click)="goToCart()"><span class="nav-icon-circle"><ion-icon
+                            name="cart-outline"></ion-icon></span></button>
+                <button class="nav-btn active" (click)="goToProfile()"><span class="nav-icon-circle active"><ion-icon
+                            name="person-outline"></ion-icon></span></button>
+            </div>
+        </div>
+    </ng-container>
+    <!-- Overlay Logout Modal -->
+    <div *ngIf="showLogoutModal" class="logout-overlay" (click)="showLogoutModal = false"></div>
+    <div *ngIf="showLogoutModal" class="logout-bottom-sheet">
+        <div class="logout-title">Logout</div>
+        <div class="logout-message">Are you sure want to logout?</div>
+        <div class="logout-actions">
+            <button class="btn-cancel" (click)="showLogoutModal = false">Cancel</button>
+            <button class="btn-logout" (click)="logout()">Logout</button>
+        </div>
+    </div>
+</ion-content>

@@ -1,0 +1,170 @@
+<app-admin-sidebar></app-admin-sidebar>
+<app-admin-header></app-admin-header>
+
+<div class="tambah-produk-main-content">
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" *ngIf="loading">
+    <div class="loading-content">
+      <ion-spinner name="crescent"></ion-spinner>
+      <p>Memuat data produk...</p>
+    </div>
+  </div>
+
+  <div class="tambah-produk-container" [class.loading]="loading">
+    <!-- Header -->
+    <div class="page-header">
+      <div class="header-content">
+        <div class="header-title">
+          <h1 *ngIf="!isEditMode">Tambah Produk Baru</h1>
+          <h1 *ngIf="isEditMode">Edit Produk</h1>
+          <p *ngIf="!isEditMode">Lengkapi informasi produk di bawah ini</p>
+          <p *ngIf="isEditMode">Perbarui informasi produk di bawah ini</p>
+        </div>
+        <div class="header-actions">
+          <button type="button" class="btn-cancel" (click)="onCancel()" [disabled]="submitting">Batal</button>
+          <button type="submit" class="btn-save" [disabled]="productForm.invalid || submitting" (click)="onSubmit()">
+            <span *ngIf="!submitting && !isEditMode">Simpan Produk</span>
+            <span *ngIf="!submitting && isEditMode">Update Produk</span>
+            <span *ngIf="submitting">Menyimpan...</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Form Container -->
+    <div class="form-container">
+      <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
+
+        <!-- Upload Foto Produk -->
+        <div class="form-section">
+          <div class="section-title">
+            <h3>Foto Produk</h3>
+            <span class="required">*</span>
+          </div>
+
+          <div class="upload-area" (click)="fileInput.click()" (dragover)="onDragOver($event)"
+            (drop)="onImageDrop($event)" [class.has-image]="imagePreview">
+
+            <div class="upload-content" *ngIf="!imagePreview">
+              <div class="upload-icon">
+                <ion-icon name="cloud-upload-outline"></ion-icon>
+              </div>
+              <p class="upload-text">Drag & drop foto produk di sini</p>
+              <p class="upload-subtext">atau klik untuk memilih file</p>
+              <p class="upload-hint">Format: JPG, PNG, GIF (Max: 2MB)</p>
+            </div>
+
+            <div class="image-preview" *ngIf="imagePreview">
+              <img [src]="imagePreview" alt="Preview">
+              <button type="button" class="remove-btn" (click)="removeImage()">
+                <ion-icon name="close"></ion-icon>
+              </button>
+            </div>
+
+            <input #fileInput type="file" accept="image/*" (change)="onImageSelected($event)" style="display: none;">
+          </div>
+        </div>
+
+        <!-- Informasi Produk - 2 Kolom Layout -->
+        <div class="form-section">
+          <div class="section-title">
+            <h3>Informasi Produk</h3>
+          </div>
+
+          <div class="form-layout">
+            <!-- Left Column -->
+            <div class="left-column">
+              <!-- Nama Produk -->
+              <div class="form-group">
+                <label for="name">Nama Produk <span class="required">*</span></label>
+                <input type="text" id="name" formControlName="name" placeholder="Masukkan nama produk"
+                  [class.error]="productForm.get('name')?.invalid && productForm.get('name')?.touched">
+                <div class="error-message" *ngIf="getFieldError('name')">
+                  {{ getFieldError('name') }}
+                </div>
+              </div>
+
+              <!-- Kategori -->
+              <div class="form-group">
+                <label for="category">Kategori <span class="required">*</span></label>
+                <select id="category" formControlName="category_id"
+                  [class.error]="productForm.get('category_id')?.invalid && productForm.get('category_id')?.touched">
+                  <option value="">Pilih kategori</option>
+                  <option *ngFor="let category of categories" [value]="category.id">
+                    {{ category.name }}
+                  </option>
+                </select>
+                <div class="error-message" *ngIf="getFieldError('category_id')">
+                  {{ getFieldError('category_id') }}
+                </div>
+              </div>
+
+              <!-- Harga -->
+              <div class="form-group">
+                <label for="price">Harga (Rp) <span class="required">*</span></label>
+                <input type="number" id="price" formControlName="price" placeholder="0"
+                  [class.error]="productForm.get('price')?.invalid && productForm.get('price')?.touched">
+                <div class="error-message" *ngIf="getFieldError('price')">
+                  {{ getFieldError('price') }}
+                </div>
+              </div>
+
+              <!-- Stok -->
+              <div class="form-group">
+                <label for="stock">Stok <span class="required">*</span></label>
+                <input type="number" id="stock" formControlName="stock" placeholder="0"
+                  [class.error]="productForm.get('stock')?.invalid && productForm.get('stock')?.touched">
+                <div class="error-message" *ngIf="getFieldError('stock')">
+                  {{ getFieldError('stock') }}
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="right-column">
+              <!-- Deskripsi -->
+              <div class="form-group">
+                <label for="description">Deskripsi Produk</label>
+                <textarea id="description" formControlName="description"
+                  placeholder="Masukkan deskripsi produk (opsional)" rows="4"></textarea>
+              </div>
+
+              <!-- Status Produk -->
+              <div class="form-group">
+                <label>Status Produk <span class="required">*</span></label>
+                <div class="radio-group">
+                  <label class="radio-item">
+                    <input type="radio" formControlName="status" value="active">
+                    <span class="radio-custom"></span>
+                    <span class="radio-label">Aktif</span>
+                  </label>
+                  <label class="radio-item">
+                    <input type="radio" formControlName="status" value="draft">
+                    <span class="radio-custom"></span>
+                    <span class="radio-label">Draft</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tips -->
+        <div class="tips-section">
+          <div class="tips-header">
+            <ion-icon name="information-circle-outline"></ion-icon>
+            <h4>Tips Produk</h4>
+          </div>
+          <div class="tips-content">
+            <ul>
+              <li>Gunakan foto produk yang jelas dan berkualitas tinggi</li>
+              <li>Berikan deskripsi yang detail dan menarik</li>
+              <li>Pastikan harga dan stok sudah sesuai</li>
+              <li>Pilih kategori yang tepat untuk memudahkan pencarian</li>
+            </ul>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

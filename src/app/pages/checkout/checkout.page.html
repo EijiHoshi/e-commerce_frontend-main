@@ -1,0 +1,202 @@
+<ion-header class="checkout-header">
+    <div class="checkout-header-bar">
+        <button class="back-btn" (click)="goBack()">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+        </button>
+        <div class="checkout-header-title">Checkout</div>
+        <button class="help-btn">
+            <ion-icon name="help-circle-outline"></ion-icon>
+        </button>
+    </div>
+</ion-header>
+<ion-content class="checkout-content">
+    <div class="checkout-section address-section">
+        <div class="section-header">
+            <ion-icon name="location-outline" class="section-icon yellow"></ion-icon>
+            <span class="section-title">Alamat Pengiriman</span>
+            <button class="section-edit" (click)="editAddress()">
+                <ion-icon name="pencil-outline"></ion-icon>
+            </button>
+        </div>
+        <div class="address-detail-box">
+            <div class="address-name">{{address?.name}}</div>
+            <div class="address-detail">{{address?.detail}}</div>
+            <div class="address-phone">{{address?.phone}}</div>
+        </div>
+    </div>
+
+    <div class="checkout-section items-section">
+        <div class="section-header">
+            <ion-icon name="bag-outline" class="section-icon yellow"></ion-icon>
+            <span class="section-title">Daftar Produk ({{cartItems.length}})</span>
+            <button class="section-edit" (click)="editCart()">
+                <ion-icon name="pencil-outline"></ion-icon>
+            </button>
+        </div>
+        <div class="order-item-list">
+            <div class="order-item-row" *ngFor="let item of cartItems">
+                <img [src]="item.product?.image ? apiService.getImageUrl(item.product.image) : ''"
+                    [alt]="item.product?.name" class="order-item-img" />
+                <div class="order-item-info">
+                    <div class="order-item-name">{{item.product?.name}}</div>
+                    <div class="order-item-variant" *ngIf="item.variant">{{item.variant}}</div>
+                </div>
+                <div class="order-item-qty-group">
+                    <button class="qty-btn minus" (click)="decrementQty(item)"><ion-icon
+                            name="remove"></ion-icon></button>
+                    <span class="qty-value">{{item.quantity}}</span>
+                    <button class="qty-btn plus" (click)="incrementQty(item)"><ion-icon name="add"></ion-icon></button>
+                </div>
+                <div class="order-item-price">{{item.product?.price | currency:'IDR':'symbol':'1.0-0'}}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="checkout-section delivery-section">
+        <div class="section-header">
+            <ion-icon name="cube-outline" class="section-icon yellow"></ion-icon>
+            <span class="section-title">Pengiriman</span>
+            <button class="section-edit" (click)="editDelivery()">
+                <ion-icon name="pencil-outline"></ion-icon>
+            </button>
+        </div>
+        <div class="delivery-card selected">
+            <ion-icon name="cube-outline" class="option-icon yellow"></ion-icon>
+            <div class="option-info">
+                <div class="option-title">Pengiriman Standar</div>
+                <div class="option-desc">3-5 hari kerja</div>
+            </div>
+            <div class="option-free">Gratis</div>
+        </div>
+    </div>
+
+    <div class="checkout-section payment-section">
+        <div class="section-header">
+            <ion-icon name="card-outline" class="section-icon yellow"></ion-icon>
+            <span class="section-title">Payment Methods</span>
+        </div>
+        <div class="payment-method-list">
+            <div class="payment-method-item" *ngFor="let method of paymentMethods"
+                [class.selected]="paymentMethod?.id === method.id" (click)="selectPaymentMethod(method)">
+                <div class="payment-method-icon">
+                    <ion-icon [name]="getPaymentIcon(method.code)"></ion-icon>
+                </div>
+                <div class="payment-method-info">
+                    <div class="payment-method-title">{{method.name}}</div>
+                    <div class="payment-method-desc">{{getPaymentDesc(method)}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="payment-safe-info">
+            <ion-icon name="shield-checkmark-outline"></ion-icon>
+            Pembayaran 100% aman dan terenkripsi
+        </div>
+    </div>
+
+    <div class="checkout-section promo-section">
+        <div class="section-header">
+            <ion-icon name="pricetag-outline" class="section-icon yellow"></ion-icon>
+            <span class="section-title">Kode Promo</span>
+        </div>
+        <div class="promo-code-row">
+            <input type="text" [(ngModel)]="promoCode" placeholder="Masukkan kode promo" />
+            <button class="promo-apply-btn" (click)="applyPromo()">Pakai</button>
+        </div>
+    </div>
+
+    <div class="checkout-section summary-section">
+        <div class="section-header no-border">
+            <span class="section-title">Ringkasan Pesanan</span>
+        </div>
+        <div class="order-summary-list">
+            <div class="order-summary-row">
+                <span>Subtotal ({{cartItems.length}} produk)</span>
+                <span>{{subtotal | currency:'IDR':'symbol':'1.0-0'}}</span>
+            </div>
+            <div class="order-summary-row">
+                <span>Ongkir</span>
+                <span class="order-summary-free">Gratis</span>
+            </div>
+            <div class="order-summary-row">
+                <span>Pajak</span>
+                <span>{{tax | currency:'IDR':'symbol':'1.0-0'}}</span>
+            </div>
+            <div class="order-summary-row total">
+                <span>Total</span>
+                <span class="order-summary-total">{{total | currency:'IDR':'symbol':'1.0-0'}}</span>
+            </div>
+        </div>
+    </div>
+    <div class="checkout-footer-spacer" style="height: 110px;"></div>
+</ion-content>
+<div class="checkout-footer">
+    <div class="checkout-footer-total">
+        <span>Total</span>
+        <span class="footer-total-value">{{total | currency:'IDR':'symbol':'1.0-0'}}</span>
+    </div>
+    <button class="place-order-btn" (click)="placeOrder()">
+        <ion-icon name="bag-handle-outline"></ion-icon>
+        Buat Pesanan
+    </button>
+</div>
+
+<!-- Modal Shipping Address -->
+<ion-modal [isOpen]="showAddressModal" (didDismiss)="closeAddressModal()" class="shipping-address-modal">
+    <ng-template>
+        <div class="shipping-address-modal-content">
+            <div class="modal-header">
+                <button class="back-btn" (click)="closeAddressModal()"><ion-icon
+                        name="arrow-back-outline"></ion-icon></button>
+                <div class="modal-title">Shipping Address</div>
+            </div>
+            <ng-container *ngIf="showAddAddressForm; else addressCardBlock">
+                <div class="address-list-outer-card flex-grow">
+                    <div class="add-address-form">
+                        <input type="text" [(ngModel)]="newAddress.name" placeholder="Label (Home/Office)" />
+                        <input type="text" [(ngModel)]="newAddress.phone" placeholder="Phone" />
+                        <input type="text" [(ngModel)]="newAddress.province" placeholder="Province" />
+                        <input type="text" [(ngModel)]="newAddress.city" placeholder="City" />
+                        <input type="text" [(ngModel)]="newAddress.district" placeholder="District" />
+                        <input type="text" [(ngModel)]="newAddress.postal_code" placeholder="Postal Code" />
+                        <input type="text" [(ngModel)]="newAddress.street_address" placeholder="Street Address" />
+                        <textarea [(ngModel)]="newAddress.detail" placeholder="Detail (optional)"></textarea>
+                        <div class="form-btn-row">
+                            <button class="cancel-btn" (click)="showAddAddressForm = false">Cancel</button>
+                            <button class="save-btn" (click)="addAddress()">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </ng-container>
+            <ng-template #addressCardBlock>
+                <div class="address-list-outer-card flex-grow">
+                    <div class="address-list-box">
+                        <ng-container *ngIf="addresses && addresses.length > 0; else noAddress">
+                            <div class="address-card" *ngFor="let addr of addresses" (click)="selectAddress(addr)"
+                                [class.selected]="selectedAddress?.id === addr.id">
+                                <ion-icon name="location-outline" class="address-icon yellow"></ion-icon>
+                                <div class="address-info">
+                                    <div class="address-label">{{addr.name}}</div>
+                                    <div class="address-detail">{{addr.street_address}}, {{addr.city}},
+                                        {{addr.province}}</div>
+                                </div>
+                                <span class="address-radio"><ion-icon
+                                        [name]="selectedAddress?.id === addr.id ? 'radio-button-on' : 'radio-button-off'"></ion-icon></span>
+                            </div>
+                        </ng-container>
+                        <ng-template #noAddress>
+                            <div class="address-placeholder">
+                                <ion-icon name="location-outline" class="placeholder-icon"></ion-icon>
+                                <div class="placeholder-text">Belum ada alamat</div>
+                            </div>
+                        </ng-template>
+                    </div>
+                    <button class="add-address-btn" (click)="showAddAddressForm = true">
+                        <ion-icon name="add-outline"></ion-icon>
+                        Add New Shipping Address
+                    </button>
+                    <button class="apply-btn" (click)="applySelectedAddress()">Apply</button>
+                </div>
+            </ng-template>
+        </div>
+    </ng-template>
+</ion-modal>

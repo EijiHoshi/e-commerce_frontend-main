@@ -1,0 +1,29 @@
+<body>
+    <div class="container">
+        <img src="assets\img\efabli.png" class="logo" alt="Logo" />
+        <h2>Sign In</h2>
+        <p class="subtitle">Hi Welcome Back, you've been missed</p>
+
+        <form (ngSubmit)="login()">
+            <input type="email" placeholder="Email" [(ngModel)]="email" name="email" required>
+            <input type="password" placeholder="Password" [(ngModel)]="password" name="password" required>
+            <div class="remember-me">
+                <input type="checkbox" id="rememberMe" [(ngModel)]="rememberMe" name="rememberMe">
+                <label for="rememberMe">Remember Me</label>
+            </div>
+            <div class="forgot"><a [routerLink]="['/auth/forgot-password']">forgot password?</a></div>
+            <button type="submit" class="button" [disabled]="loading">
+                <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+                <span *ngIf="!loading">Sign In</span>
+            </button>
+        </form>
+
+        <div class="register">
+            Don't have an account? <a [routerLink]="['/auth/register']">Register</a><br>
+            <div class="verification-info">
+                <p>Sudah register tapi belum verifikasi email? <a (click)="goToVerification()"
+                        class="verification-link">Verifikasi Email</a></p>
+            </div>
+        </div>
+    </div>
+</body>

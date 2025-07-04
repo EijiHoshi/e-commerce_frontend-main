@@ -1,0 +1,217 @@
+<app-admin-sidebar></app-admin-sidebar>
+<app-admin-header></app-admin-header>
+
+<div class="produk-main-content">
+  <div class="produk-container">
+    <!-- Header Section -->
+    <div class="header-section">
+      <div class="header-info">
+        <h1 class="page-title">Produk</h1>
+        <p class="page-subtitle">Kelola semua produk dalam toko Anda</p>
+      </div>
+      <div class="header-actions">
+        <div class="search-box">
+          <ion-icon name="search-outline"></ion-icon>
+          <input type="text" placeholder="Cari produk..." [(ngModel)]="searchTerm" (input)="onSearchChange()">
+        </div>
+        <button class="btn-add-product" (click)="navigateToAddProduct()">
+          <ion-icon name="add-outline"></ion-icon>
+          Tambah Produk
+        </button>
+      </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="stats-cards" *ngIf="!loading">
+      <div class="stat-card">
+        <div class="stat-icon total">
+          <ion-icon name="cube-outline"></ion-icon>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-value">{{ statistics.total_products || 0 }}</h3>
+          <p class="stat-label">Total Produk</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon active">
+          <ion-icon name="checkmark-circle-outline"></ion-icon>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-value">{{ statistics.active_products || 0 }}</h3>
+          <p class="stat-label">Produk Aktif</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon low-stock">
+          <ion-icon name="warning-outline"></ion-icon>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-value">{{ statistics.low_stock_products || 0 }}</h3>
+          <p class="stat-label">Stok Menipis</p>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon out-of-stock">
+          <ion-icon name="close-circle-outline"></ion-icon>
+        </div>
+        <div class="stat-content">
+          <h3 class="stat-value">{{ statistics.out_of_stock_products || 0 }}</h3>
+          <p class="stat-label">Stok Habis</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters Section -->
+    <div class="filters-section">
+      <div class="filter-group">
+        <label>Kategori:</label>
+        <select [(ngModel)]="selectedCategory" (change)="onFilterChange()">
+          <option value="">Semua Kategori</option>
+          <option *ngFor="let category of categories" [value]="category.id">
+            {{ category.name }}
+          </option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Status:</label>
+        <select [(ngModel)]="selectedStatus" (change)="onFilterChange()">
+          <option value="">Semua Status</option>
+          <option value="active">Aktif</option>
+          <option value="low_stock">Stok Menipis</option>
+          <option value="out_of_stock">Stok Habis</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label>Urutkan:</label>
+        <select [(ngModel)]="sortBy" (change)="onFilterChange()">
+          <option value="created_at">Terbaru</option>
+          <option value="name">Nama A-Z</option>
+          <option value="price">Harga Tertinggi</option>
+          <option value="stock">Stok Terbanyak</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Products Table -->
+    <div class="table-container">
+      <div class="table-header">
+        <div class="table-title">
+          <h2>Daftar Produk</h2>
+          <span class="product-count">{{ products.length }} produk</span>
+        </div>
+        <div class="table-actions">
+          <button class="btn-bulk-delete" (click)="bulkDelete()" [disabled]="selectedProducts.length === 0">
+            <ion-icon name="trash-outline"></ion-icon>
+            Hapus Terpilih ({{ selectedProducts.length }})
+          </button>
+        </div>
+      </div>
+
+      <div class="table-wrapper">
+        <table class="products-table">
+          <thead>
+            <tr>
+              <th class="checkbox-col">
+                <input type="checkbox" [checked]="isAllSelected" (change)="toggleSelectAll()">
+              </th>
+              <th class="product-col">Produk</th>
+              <th class="category-col">Kategori</th>
+              <th class="price-col">Harga</th>
+              <th class="stock-col">Stok</th>
+              <th class="status-col">Status</th>
+              <th class="actions-col">Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of products" class="product-row">
+              <td class="checkbox-col">
+                <input type="checkbox" [checked]="selectedProducts.includes(product.id)"
+                  (change)="toggleProductSelection(product.id)">
+              </td>
+              <td class="product-col">
+                <div class="product-info">
+                  <div class="product-image">
+                    <img [src]="getImageUrl(product.image)" [alt]="product.name" *ngIf="product.image">
+                    <div class="image-placeholder" *ngIf="!product.image">
+                      <ion-icon name="image-outline"></ion-icon>
+                    </div>
+                  </div>
+                  <div class="product-details">
+                    <h4 class="product-name">{{ product.name }}</h4>
+                    <p class="product-sku">{{ product.sku || 'SKU-' + product.id }}</p>
+                  </div>
+                </div>
+              </td>
+              <td class="category-col">
+                <span class="category-name">{{ product.category?.name }}</span>
+              </td>
+              <td class="price-col">
+                <span class="price">Rp {{ formatPrice(product.price) }}</span>
+              </td>
+              <td class="stock-col">
+                <span class="stock">{{ product.stock }} {{ product.unit || 'pcs' }}</span>
+              </td>
+              <td class="status-col">
+                <span class="status-badge" [ngClass]="getStatusClass(product)">
+                  {{ getStatusText(product) }}
+                </span>
+              </td>
+              <td class="actions-col">
+                <div class="action-buttons">
+                  <button class="btn-edit" (click)="editProduct(product.id)">
+                    <ion-icon name="create-outline"></ion-icon>
+                  </button>
+                  <button class="btn-delete" (click)="deleteProduct(product.id)">
+                    <ion-icon name="trash-outline"></ion-icon>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Loading State -->
+      <div class="loading-state" *ngIf="loading">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Memuat data produk...</p>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-state" *ngIf="!loading && products.length === 0">
+        <ion-icon name="cube-outline"></ion-icon>
+        <h3>Tidak ada produk</h3>
+        <p>Belum ada produk yang ditambahkan. Mulai dengan menambahkan produk pertama Anda.</p>
+        <button class="btn-add-product" (click)="navigateToAddProduct()">
+          <ion-icon name="add-outline"></ion-icon>
+          Tambah Produk Pertama
+        </button>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination" *ngIf="!loading && products.length > 0">
+      <button class="btn-prev" [disabled]="currentPage === 1" (click)="changePage(currentPage - 1)">
+        <ion-icon name="chevron-back-outline"></ion-icon>
+        Sebelumnya
+      </button>
+
+      <div class="page-numbers">
+        <button *ngFor="let page of getPageNumbers()" class="page-number" [class.active]="page === currentPage"
+          (click)="changePage(page)">
+          {{ page }}
+        </button>
+      </div>
+
+      <button class="btn-next" [disabled]="currentPage === totalPages" (click)="changePage(currentPage + 1)">
+        Selanjutnya
+        <ion-icon name="chevron-forward-outline"></ion-icon>
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,134 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import "@ionic/angular/css/display.css";
+
+/* Optional CSS utils that can be commented out */
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
+
+/**
+ * Ionic Dark Mode
+ * -----------------------------------------------------
+ * For more info, please see:
+ * https://ionicframework.com/docs/theming/dark-mode
+ */
+
+/* @import "@ionic/angular/css/palettes/dark.always.css"; */
+/* @import "@ionic/angular/css/palettes/dark.class.css"; */
+@import "@ionic/angular/css/palettes/dark.system.css";
+
+body,
+ion-content,
+.ion-page,
+.cart-content,
+ion-modal {
+    --background: #fff !important;
+}
+
+ion-header,
+.custom-cart-header,
+.cart-header-bar {
+    background: #fff !important;
+    --background: #fff !important;
+    color: #222 !important;
+}
+
+ion-card,
+.cart-item,
+.cart-list,
+.cart-summary-info,
+.cart-divider {
+    background: #fff !important;
+    --background: #fff !important;
+    color: #222 !important;
+}
+
+ion-content.cart-content,
+.cart-content,
+.cart-list,
+.cart-item {
+    background: #fff !important;
+    --background: #fff !important;
+    color: #222 !important;
+}
+
+ion-modal::part(backdrop),
+.delete-modal::part(backdrop),
+[aria-modal="true"].delete-modal::part(backdrop) {
+    background: rgba(0, 0, 0, 0.28) !important;
+    --ion-backdrop-background-color: rgba(0, 0, 0, 0.28) !important;
+}
+
+:root,
+html,
+body,
+[class*="dark"],
+[mode="ios"],
+[mode="md"] {
+    --ion-background-color: #fff !important;
+    --ion-background-color-rgb: 255, 255, 255 !important;
+    --ion-text-color: #222 !important;
+    --ion-color-step-50: #fff !important;
+    --ion-color-step-100: #fff !important;
+    --ion-color-step-150: #fff !important;
+    --ion-color-step-200: #fff !important;
+    --ion-color-step-250: #fff !important;
+    --ion-color-step-300: #fff !important;
+    --ion-color-step-350: #fff !important;
+    --ion-color-step-400: #fff !important;
+    --ion-color-step-450: #fff !important;
+    --ion-color-step-500: #fff !important;
+    --ion-color-step-550: #fff !important;
+    --ion-color-step-600: #fff !important;
+    --ion-color-step-650: #fff !important;
+    --ion-color-step-700: #fff !important;
+    --ion-color-step-750: #fff !important;
+    --ion-color-step-800: #fff !important;
+    --ion-color-step-850: #fff !important;
+    --ion-color-step-900: #fff !important;
+    --ion-color-step-950: #fff !important;
+}
+
+.list-md {
+    background: #fff !important;
+}
+
+:host {
+    --background: #fff !important;
+}
+
+ion-item,
+ion-list,
+ion-list.list-md,
+.cart-item,
+.cart-list {
+    --background: #fff !important;
+    --ion-item-background: #fff !important;
+    --ion-background-color: #fff !important;
+    background: #fff !important;
+    color: #222 !important;
+}
+
+ion-item::part(native),
+ion-list::part(native) {
+    background: #fff !important;
+}

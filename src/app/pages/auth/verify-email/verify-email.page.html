@@ -1,0 +1,108 @@
+<body>
+  <div class="container">
+    <img src="assets\img\efabli.png" class="logo" alt="Logo" />
+
+    <div *ngIf="isPending" class="pending-content">
+      <div class="pending-icon">
+        <ion-icon name="mail-outline"></ion-icon>
+      </div>
+      <h2>Verifikasi Email</h2>
+
+      <!-- Input email jika belum ada -->
+      <div *ngIf="!email" class="email-input-section">
+        <p class="subtitle">Masukkan email yang telah Anda daftarkan:</p>
+        <input type="email" placeholder="Email" [(ngModel)]="inputEmail" class="email-input" [disabled]="loading">
+        <button type="button" class="button" (click)="setEmail()" [disabled]="!inputEmail || loading">
+          Lanjutkan
+        </button>
+      </div>
+
+      <!-- Tampilan OTP jika sudah ada email -->
+      <div *ngIf="email" class="otp-content">
+        <p class="subtitle">Kami telah mengirim kode verifikasi ke:</p>
+
+        <div class="email-info">
+          <p><strong>{{ email }}</strong></p>
+        </div>
+
+        <p class="instruction">
+          Silakan cek inbox email Anda dan masukkan kode 6 digit yang telah dikirim.
+          Jika tidak menemukan email, cek folder spam.
+        </p>
+
+        <div class="otp-input-section">
+          <p>Masukkan kode verifikasi:</p>
+          <div class="otp-inputs">
+            <input type="text" maxlength="1" [(ngModel)]="otpCode[0]" (input)="onOtpInput(0, $event)"
+              (keydown)="onOtpKeydown(0, $event)" class="otp-input" data-index="0" [disabled]="loading">
+            <input type="text" maxlength="1" [(ngModel)]="otpCode[1]" (input)="onOtpInput(1, $event)"
+              (keydown)="onOtpKeydown(1, $event)" class="otp-input" data-index="1" [disabled]="loading">
+            <input type="text" maxlength="1" [(ngModel)]="otpCode[2]" (input)="onOtpInput(2, $event)"
+              (keydown)="onOtpKeydown(2, $event)" class="otp-input" data-index="2" [disabled]="loading">
+            <input type="text" maxlength="1" [(ngModel)]="otpCode[3]" (input)="onOtpInput(3, $event)"
+              (keydown)="onOtpKeydown(3, $event)" class="otp-input" data-index="3" [disabled]="loading">
+            <input type="text" maxlength="1" [(ngModel)]="otpCode[4]" (input)="onOtpInput(4, $event)"
+              (keydown)="onOtpKeydown(4, $event)" class="otp-input" data-index="4" [disabled]="loading">
+            <input type="text" maxlength="1" [(ngModel)]="otpCode[5]" (input)="onOtpInput(5, $event)"
+              (keydown)="onOtpKeydown(5, $event)" class="otp-input" data-index="5" [disabled]="loading">
+          </div>
+
+          <button type="button" class="button" (click)="verifyEmail()" [disabled]="loading || !isOtpComplete()">
+            <ion-spinner *ngIf="loading" name="crescent"></ion-spinner>
+            <span *ngIf="!loading">Verifikasi Email</span>
+          </button>
+        </div>
+
+        <div class="resend-section">
+          <p>Tidak menerima kode?</p>
+          <button type="button" class="resend-button" (click)="resendEmail()"
+            [disabled]="resendLoading || countdown > 0">
+            <ion-spinner *ngIf="resendLoading" name="crescent"></ion-spinner>
+            <span *ngIf="!resendLoading && countdown === 0">Kirim Ulang Kode</span>
+            <span *ngIf="!resendLoading && countdown > 0">Kirim Ulang ({{ countdown }}s)</span>
+          </button>
+        </div>
+      </div>
+
+      <button type="button" class="button secondary" (click)="goToLogin()">
+        Kembali ke Login
+      </button>
+    </div>
+
+    <div *ngIf="!isPending && !isVerified && !isError" class="verification-content">
+      <h2>Verifikasi Email</h2>
+      <p class="subtitle">Silakan verifikasi alamat email Anda untuk melanjutkan</p>
+
+      <div class="email-info">
+        <p>Email: <strong>{{ email }}</strong></p>
+      </div>
+
+      <div class="loading" *ngIf="loading">
+        <ion-spinner name="crescent"></ion-spinner>
+        <p>Memverifikasi email...</p>
+      </div>
+    </div>
+
+    <div *ngIf="isVerified" class="success-content">
+      <div class="success-icon">
+        <ion-icon name="checkmark-circle"></ion-icon>
+      </div>
+      <h2>Email Terverifikasi!</h2>
+      <p class="subtitle">Akun Anda telah berhasil diverifikasi</p>
+      <button type="button" class="button" (click)="goToLogin()">
+        Masuk ke Akun
+      </button>
+    </div>
+
+    <div *ngIf="isError" class="error-content">
+      <div class="error-icon">
+        <ion-icon name="close-circle"></ion-icon>
+      </div>
+      <h2>Verifikasi Gagal</h2>
+      <p class="subtitle">{{ errorMessage }}</p>
+      <button type="button" class="button" (click)="goToLogin()">
+        Kembali ke Login
+      </button>
+    </div>
+  </div>
+</body>

@@ -1,0 +1,650 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+:host {
+    font-family: 'Inter', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+}
+
+// Loading Overlay
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+
+    .loading-content {
+        text-align: center;
+
+        ion-spinner {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 16px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #6a6f7b;
+            margin: 0;
+        }
+    }
+}
+
+.tambah-produk-main-content {
+    margin-left: 280px;
+    padding: 32px;
+    padding-top: 100px;
+    background-color: #f8fafc;
+    min-height: 100vh;
+    height: 100vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.tambah-produk-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding-bottom: 32px;
+    background: #f8f9fa;
+    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    overflow-y: auto;
+    max-height: 100vh;
+
+    &.loading {
+        opacity: 0.6;
+        pointer-events: none;
+    }
+}
+
+// Header
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 32px;
+    padding-left: 32px;
+    padding-right: 32px;
+
+    .header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+
+        .header-title {
+            h1 {
+                font-size: 28px;
+                font-weight: 700;
+                color: #111718;
+                margin: 0 0 4px 0;
+            }
+
+            p {
+                font-size: 16px;
+                color: #6a6f7b;
+                margin: 0;
+            }
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            margin-left: 24px;
+
+            .btn-cancel {
+                background: #f3f4f6;
+                color: #6a6f7b;
+                border: none;
+                border-radius: 8px;
+                padding: 0 24px;
+                height: 44px;
+                font-size: 16px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: background 0.2s;
+
+                &:hover:not(:disabled) {
+                    background: #e5e7eb;
+                }
+
+                &:disabled {
+                    opacity: 0.6;
+                    cursor: not-allowed;
+                }
+            }
+
+            .btn-save {
+                background: #ffd600;
+                color: #111718;
+                border: none;
+                border-radius: 8px;
+                padding: 0 32px;
+                height: 44px;
+                font-size: 16px;
+                font-weight: 700;
+                cursor: pointer;
+                transition: background 0.2s;
+
+                &:hover:not(:disabled) {
+                    background: #ffe066;
+                }
+
+                &:disabled {
+                    opacity: 0.6;
+                    cursor: not-allowed;
+                }
+            }
+        }
+    }
+}
+
+// Form Container
+.form-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    margin: 0 32px;
+}
+
+.product-form {
+    padding: 32px;
+}
+
+// Form Sections
+.form-section {
+    margin-bottom: 32px;
+
+    &:last-child {
+        margin-bottom: 0;
+    }
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+
+    h3 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #111718;
+        margin: 0;
+    }
+
+    .required {
+        color: #dc3545;
+        margin-left: 4px;
+    }
+}
+
+// Upload Area
+.upload-area {
+    border: 2px dashed #e5e7eb;
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: #fafbfc;
+
+    &:hover {
+        border-color: #3b82f6;
+        background: #f0f9ff;
+    }
+
+    &.has-image {
+        border-style: solid;
+        border-color: #10b981;
+        background: #f0fdf4;
+    }
+}
+
+.upload-content {
+    .upload-icon {
+        width: 48px;
+        height: 48px;
+        background: #e5e7eb;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 12px;
+
+        ion-icon {
+            font-size: 24px;
+            color: #6b7280;
+        }
+    }
+
+    .upload-text {
+        font-size: 16px;
+        font-weight: 600;
+        color: #374151;
+        margin: 0 0 8px 0;
+    }
+
+    .upload-subtext {
+        font-size: 14px;
+        color: #6b7280;
+        margin: 0 0 8px 0;
+    }
+
+    .upload-hint {
+        font-size: 12px;
+        color: #9ca3af;
+        margin: 0;
+    }
+}
+
+.image-preview {
+    position: relative;
+    display: inline-block;
+
+    img {
+        max-width: 200px;
+        max-height: 200px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .remove-btn {
+        position: absolute;
+        top: -8px;
+        right: -8px;
+        width: 24px;
+        height: 24px;
+        background: #ef4444;
+        color: white;
+        border: none;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 12px;
+        transition: background 0.2s;
+
+        &:hover {
+            background: #dc2626;
+        }
+    }
+}
+
+// Form Layout
+.form-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+}
+
+.left-column,
+.right-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+// Form Groups
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #374151;
+
+        .required {
+            color: #dc3545;
+        }
+    }
+
+    input,
+    select,
+    textarea {
+        padding: 12px 16px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 14px;
+        background: white;
+        color: #374151;
+        transition: all 0.3s ease;
+
+        &:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        &.error {
+            border-color: #dc3545;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1);
+        }
+
+        &::placeholder {
+            color: #9ca3af;
+        }
+    }
+
+    textarea {
+        resize: vertical;
+        min-height: 100px;
+    }
+
+    .error-message {
+        font-size: 12px;
+        color: #dc3545;
+        margin-top: 4px;
+    }
+}
+
+// Radio Group
+.radio-group {
+    display: flex;
+    gap: 16px;
+
+    .radio-item {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+
+        input[type="radio"] {
+            display: none;
+        }
+
+        .radio-custom {
+            width: 16px;
+            height: 16px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            margin-right: 8px;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        input[type="radio"]:checked+.radio-custom {
+            border-color: #3b82f6;
+
+            &::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 6px;
+                height: 6px;
+                background: #3b82f6;
+                border-radius: 50%;
+            }
+        }
+
+        .radio-label {
+            font-size: 14px;
+            color: #374151;
+        }
+    }
+}
+
+// Tips Section
+.tips-section {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 32px;
+
+    .tips-header {
+        display: flex;
+        align-items: center;
+        margin-bottom: 12px;
+
+        ion-icon {
+            font-size: 20px;
+            color: #0ea5e9;
+            margin-right: 8px;
+        }
+
+        h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #0c4a6e;
+            margin: 0;
+        }
+    }
+
+    .tips-content {
+        ul {
+            margin: 0;
+            padding-left: 20px;
+
+            li {
+                font-size: 14px;
+                color: #0c4a6e;
+                margin-bottom: 4px;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+}
+
+// Action Buttons
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding-top: 24px;
+    border-top: 1px solid #e5e7eb;
+
+    .btn {
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 500;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-width: 120px;
+
+        &:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    }
+
+    .btn-secondary {
+        background: #f3f4f6;
+        color: #374151;
+
+        &:hover:not(:disabled) {
+            background: #e5e7eb;
+        }
+    }
+
+    .btn-primary {
+        background: #3b82f6;
+        color: white;
+
+        &:hover:not(:disabled) {
+            background: #2563eb;
+        }
+    }
+}
+
+// Loading States
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+// Animation
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.tambah-produk-container {
+    animation: fadeIn 0.5s ease-out;
+}
+
+// Responsive Design - Sama seperti dashboard
+@media (max-width: 1200px) {
+    .form-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+}
+
+@media (max-width: 768px) {
+    .tambah-produk-main-content {
+        margin-left: 0;
+        padding: 16px;
+        padding-top: 80px;
+    }
+
+    .tambah-produk-container {
+        padding: 0;
+    }
+
+    .page-header {
+        padding: 16px;
+        padding-top: 80px;
+        margin-bottom: 24px;
+
+        .header-content {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+
+            .header-actions {
+                margin-left: 0;
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    }
+
+    .form-container {
+        margin: 0 16px;
+        border-radius: 8px;
+    }
+
+    .product-form {
+        padding: 20px;
+    }
+
+    .upload-area {
+        padding: 24px;
+    }
+
+    .form-layout {
+        gap: 20px;
+    }
+
+    .form-actions {
+        flex-direction: column;
+
+        .btn {
+            width: 100%;
+        }
+    }
+
+    .tips-section {
+        margin: 0 16px 24px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .tambah-produk-main-content {
+        padding: 12px;
+        padding-top: 70px;
+    }
+
+    .page-header {
+        padding: 12px;
+        padding-top: 70px;
+
+        .header-content {
+            .header-title {
+                h1 {
+                    font-size: 24px;
+                }
+
+                p {
+                    font-size: 14px;
+                }
+            }
+
+            .header-actions {
+                flex-direction: column;
+                gap: 8px;
+
+                .btn-cancel,
+                .btn-save {
+                    width: 100%;
+                    height: 40px;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+
+    .form-container {
+        margin: 0 12px;
+    }
+
+    .product-form {
+        padding: 16px;
+    }
+
+    .upload-area {
+        padding: 20px;
+    }
+
+    .form-group {
+
+        input,
+        select,
+        textarea {
+            padding: 10px 12px;
+            font-size: 14px;
+        }
+    }
+
+    .tips-section {
+        margin: 0 12px 20px 12px;
+        padding: 16px;
+
+        .tips-header {
+            h4 {
+                font-size: 14px;
+            }
+        }
+
+        .tips-content {
+            ul {
+                li {
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+}

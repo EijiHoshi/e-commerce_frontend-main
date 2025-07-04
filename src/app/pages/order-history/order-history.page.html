@@ -1,0 +1,45 @@
+<ion-content class="my-orders-content">
+    <div class="my-orders-header">
+        <button class="back-btn" (click)="goBack()">
+            <ion-icon name="chevron-back-outline"></ion-icon>
+        </button>
+        <div class="my-orders-title">My Orders</div>
+        <div class="header-placeholder"></div>
+    </div>
+
+    <div class="my-orders-tabs">
+        <div class="tab-item" [class.active]="activeTab === 'active'" (click)="setTab('active')">Active</div>
+        <div class="tab-item" [class.active]="activeTab === 'finished'" (click)="setTab('finished')">Finished</div>
+        <div class="tab-item" [class.active]="activeTab === 'canceled'" (click)="setTab('canceled')">Canceled</div>
+    </div>
+    <div class="tab-underline">
+        <div class="tab-underline-indicator"
+            [ngStyle]="{'left': activeTab === 'active' ? '0%' : activeTab === 'finished' ? '33.33%' : '66.66%'}"></div>
+    </div>
+
+    <div class="order-list-wrapper" *ngIf="!loading && filteredOrders.length">
+        <div class="order-card" *ngFor="let order of filteredOrders; let i = index">
+            <div class="order-img-box">
+                <img [src]="order.order_items[0]?.product?.image ? api.getImageUrl(order.order_items[0].product.image) : 'assets/img/placeholder.png'"
+                    alt="thumb" />
+            </div>
+            <div class="order-info-box">
+                <div class="order-product-name">{{ order.order_items[0]?.product?.name }}</div>
+                <div class="order-product-variant">Size : {{ order.order_items[0]?.product?.size || '-' }} | {{
+                    order.order_items[0]?.product?.color || '-' }}</div>
+                <div class="order-product-price">IDR {{ order.total_amount | number:'1.0-0' }}</div>
+            </div>
+            <div class="order-action-box">
+                <button *ngIf="activeTab === 'active'" class="order-detail-btn" (click)="goToDetail(order.id)">Track
+                    Order</button>
+                <button *ngIf="activeTab === 'finished'" class="order-leave-review-btn"
+                    (click)="leaveReview(order.id)">Leave Review</button>
+                <button *ngIf="activeTab === 'canceled'" class="order-reorder-btn"
+                    (click)="reOrder(order.id)">Re-Order</button>
+            </div>
+        </div>
+    </div>
+    <ion-spinner *ngIf="loading" class="ion-margin"></ion-spinner>
+    <ion-text color="danger" *ngIf="error">{{ error }}</ion-text>
+    <ion-text *ngIf="!loading && !filteredOrders.length && !error">Belum ada riwayat pesanan.</ion-text>
+</ion-content>

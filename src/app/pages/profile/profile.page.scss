@@ -1,0 +1,434 @@
+// PROFILE PAGE STYLE
+.profile-content {
+    --background: #fff !important;
+}
+
+.profile-container,
+.home-container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 0 32px 0;
+}
+
+.profile-header,
+.profile-title {
+    display: none !important;
+}
+
+.profile-photo-box {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    margin: 32px auto 12px auto;
+}
+
+.profile-photo {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #fff;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+    background: #f3f3f3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 48px;
+    color: #FFD700;
+}
+
+.profile-photo.default ion-icon {
+    font-size: 48px;
+    color: #FFD700;
+}
+
+.edit-photo-btn {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    background: #FFD700;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.18);
+    border: 2px solid #fff;
+    font-size: 18px;
+    color: #fff;
+    z-index: 2;
+}
+
+.profile-username {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 28px;
+    margin-top: 8px;
+}
+
+.profile-menu-list {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 24px;
+}
+
+.profile-menu-item {
+    display: flex;
+    align-items: center;
+    background: #f6f6f6;
+    border-radius: 16px;
+    height: 52px;
+    padding: 0 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    border: none;
+    outline: none;
+    transition: box-shadow 0.2s;
+}
+
+.profile-menu-item:active {
+    box-shadow: 0 4px 16px rgba(255, 215, 0, 0.10);
+}
+
+.menu-icon {
+    color: #FFD700;
+    font-size: 22px;
+    margin-right: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.menu-title {
+    flex: 1;
+    font-size: 16px;
+    font-weight: 600;
+    color: #222;
+}
+
+.menu-arrow {
+    color: #FFD700;
+    font-size: 18px;
+    margin-left: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.profile-footer-spacer {
+    height: 90px;
+}
+
+// Bottom nav copy dari home-bottom-nav agar konsisten
+.home-bottom-nav {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+    pointer-events: none;
+    padding-bottom: env(safe-area-inset-bottom, 18px);
+}
+
+.home-bottom-nav-inner {
+    background: #FFD700;
+    border-radius: 35px;
+    box-shadow: 0 4px 24px rgba(255, 215, 0, 0.18);
+    height: 70px;
+    min-width: 320px;
+    max-width: 420px;
+    width: 92vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 28px;
+    gap: 18px;
+    pointer-events: auto;
+    margin-bottom: 18px;
+}
+
+.nav-btn {
+    background: none;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    padding: 0;
+    margin: 0 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-icon-circle {
+    background: #fff;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.10);
+    transition: background 0.2s, color 0.2s;
+}
+
+.nav-icon-circle ion-icon {
+    color: #FFD700;
+    font-size: 26px;
+}
+
+.nav-icon-circle.active {
+    background: #FFD700;
+}
+
+.nav-icon-circle.active ion-icon {
+    color: #fff;
+}
+
+@media (max-width: 600px) {
+    .profile-container {
+        padding: 0 0 16px 0;
+    }
+
+    .profile-photo-box {
+        width: 90px;
+        height: 90px;
+    }
+
+    .profile-photo {
+        width: 90px;
+        height: 90px;
+        font-size: 38px;
+    }
+
+    .edit-photo-btn {
+        width: 28px;
+        height: 28px;
+        font-size: 16px;
+    }
+
+    .profile-username {
+        font-size: 18px;
+        margin-bottom: 18px;
+    }
+
+    .profile-menu-item {
+        height: 48px;
+        border-radius: 14px;
+        padding: 0 10px;
+    }
+
+    .menu-icon {
+        font-size: 20px;
+        margin-right: 10px;
+    }
+
+    .menu-title {
+        font-size: 15px;
+    }
+
+    .menu-arrow {
+        font-size: 16px;
+    }
+
+    .home-bottom-nav-inner {
+        height: 60px;
+        border-radius: 28px;
+        padding: 0 10px;
+    }
+
+    .nav-icon-circle {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+}
+
+// Hilangkan outline biru pada tombol di mobile
+button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.skeleton {
+    background: linear-gradient(90deg, #f3f3f3 25%, #ececec 50%, #f3f3f3 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.2s infinite linear;
+}
+
+.skeleton.profile-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin: 0 auto;
+}
+
+.skeleton.skeleton-text {
+    width: 80px;
+    height: 22px;
+    border-radius: 8px;
+    margin: 12px auto 0 auto;
+}
+
+.skeleton.edit-photo-btn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    border: 3px solid #fff;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+.profile-loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.logout-overlay {
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.25);
+    z-index: 1000;
+}
+
+.logout-bottom-sheet {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff;
+    border-radius: 32px 32px 0 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+    padding: 36px 20px 28px 20px;
+    min-height: 220px;
+    max-width: 420px;
+    margin: 0 auto;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: slideUp 0.25s cubic-bezier(.4, 1.4, .6, 1) 1;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+.logout-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 18px;
+    text-align: center;
+}
+
+.logout-message {
+    font-size: 1.05rem;
+    color: #444;
+    margin-bottom: 38px;
+    text-align: center;
+}
+
+.logout-actions {
+    display: flex;
+    gap: 22px;
+    width: 100%;
+    justify-content: center;
+}
+
+.btn-cancel {
+    flex: 1;
+    height: 52px;
+    border-radius: 26px;
+    border: 2px solid #FFD700;
+    background: #fff;
+    color: #FFD700;
+    font-size: 1.15rem;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.08);
+    margin-right: 0;
+}
+
+.btn-logout {
+    flex: 1;
+    height: 52px;
+    border-radius: 26px;
+    border: none;
+    background: #FFD700;
+    color: #fff;
+    font-size: 1.15rem;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.13);
+    margin-left: 0;
+}
+
+.custom-cart-header {
+    background: transparent;
+    box-shadow: none;
+    border: none;
+}
+
+.cart-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 0 12px 0;
+    background: #fff;
+    border-top-left-radius: 32px;
+    border-top-right-radius: 32px;
+}
+
+.back-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #FFD700;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    margin-left: 18px;
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.13);
+}
+
+.cart-header-title {
+    flex: 1;
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: #222;
+    letter-spacing: 0.5px;
+}
+
+.cart-header-placeholder {
+    width: 40px;
+    height: 40px;
+    margin-right: 18px;
+}

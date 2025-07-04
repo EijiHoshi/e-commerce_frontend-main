@@ -1,0 +1,54 @@
+<app-admin-sidebar></app-admin-sidebar>
+<app-admin-header></app-admin-header>
+<div class="pelanggan-main-content">
+  <div class="pelanggan-container">
+    <!-- Header Section -->
+    <div class="header-section">
+      <div class="header-info">
+        <div class="page-title">Pelanggan</div>
+        <div class="page-subtitle">Manajemen data pelanggan terdaftar</div>
+      </div>
+      <div class="header-actions">
+        <div class="search-box">
+          <ion-icon name="search-outline"></ion-icon>
+          <input type="text" placeholder="Cari nama/email pelanggan..." [(ngModel)]="search" (input)="onSearch()" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Statistik Cards -->
+    <div class="stats-cards">
+      <div class="stat-card total">
+        <div class="stat-icon total"><ion-icon name="people-outline"></ion-icon></div>
+        <div class="stat-content">
+          <div class="stat-value">{{ pelangganList.length }}</div>
+          <div class="stat-label">Total Pelanggan</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="table-container">
+      <div class="table-content">
+        <div class="table-headers">
+          <div class="header-cell no">No</div>
+          <div class="header-cell">Nama</div>
+          <div class="header-cell">Email</div>
+          <div class="header-cell">Tanggal Daftar</div>
+          <div class="header-cell">Gender</div>
+        </div>
+        <div class="table-rows">
+          <div *ngIf="isLoading" class="no-data">Memuat data...</div>
+          <div *ngIf="!isLoading && filteredList.length === 0" class="no-data">Tidak ada data pelanggan</div>
+          <div *ngFor="let p of filteredList; let i = index" class="table-row">
+            <div class="row-cell no">{{ i + 1 }}</div>
+            <div class="row-cell">{{ p.name }}</div>
+            <div class="row-cell">{{ p.email }}</div>
+            <div class="row-cell">{{ p.created_at | date:'dd/MM/yyyy' }}</div>
+            <div class="row-cell">{{ p.gender || '-' }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

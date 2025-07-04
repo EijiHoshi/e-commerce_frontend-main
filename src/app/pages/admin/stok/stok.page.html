@@ -1,0 +1,167 @@
+<app-admin-sidebar></app-admin-sidebar>
+<app-admin-header></app-admin-header>
+
+<div class="penjualan-main-content">
+  <div class="penjualan-container">
+    <!-- Header Section -->
+    <div class="header-section">
+      <div class="header-info">
+        <div class="page-title">Manajemen Stok</div>
+        <div class="page-subtitle">Pantau dan kelola stok produk secara real-time</div>
+      </div>
+      <div class="header-actions">
+        <button class="btn-stock-toggle btn-stock-in" [ngClass]="{active: stockType === 'in'}"
+          (click)="setStockType('in')">
+          <span class="icon-plus">
+            <ion-icon name="add-outline"></ion-icon>
+          </span>
+          <span>Stok Masuk</span>
+        </button>
+        <button class="btn-stock-toggle btn-stock-out" [ngClass]="{active: stockType === 'out'}"
+          (click)="setStockType('out')">
+          <span class="icon-minus">
+            <ion-icon name="remove-outline"></ion-icon>
+          </span>
+          <span>Stok Keluar</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Statistik Cards -->
+    <div class="stats-cards">
+      <div class="stat-card">
+        <div class="stat-icon total">
+          <ion-icon name="cube-outline"></ion-icon>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ totalStok }}</div>
+          <div class="stat-label">Total Produk</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon low-stock">
+          <ion-icon name="warning-outline"></ion-icon>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ stokMenipis }}</div>
+          <div class="stat-label">Stok Menipis</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon out-of-stock">
+          <ion-icon name="close-circle-outline"></ion-icon>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">{{ stokHabis }}</div>
+          <div class="stat-label">Stok Habis</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon total">
+          <ion-icon name="cash-outline"></ion-icon>
+        </div>
+        <div class="stat-content">
+          <div class="stat-value">Rp {{ totalNilaiStok | number:'1.0-0' }}</div>
+          <div class="stat-label">Total Nilai Stok</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filter Section -->
+    <div class="filters-section">
+      <div class="search-box">
+        <ion-icon name="search-outline"></ion-icon>
+        <input type="text" [(ngModel)]="searchText" (input)="onSearchChange()" placeholder="Cari produk..." />
+      </div>
+      <div class="filter-group">
+        <label>Kategori</label>
+        <select [(ngModel)]="filterKategori" (change)="onFilterKategoriChange()">
+          <option value="all">Semua Kategori</option>
+          <option *ngFor="let cat of kategoriList" [value]="cat.id">{{ cat.name }}</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Status Stok</label>
+        <select [(ngModel)]="filterStok" (change)="onFilterStokChange()">
+          <option value="all">Semua Stok</option>
+          <option value="low">Stok Menipis</option>
+          <option value="out">Stok Habis</option>
+        </select>
+      </div>
+      <div class="filter-group">
+        <label>Urutkan</label>
+        <select [(ngModel)]="sortBy" (change)="onSortChange()">
+          <option value="name">Nama Produk</option>
+          <option value="stock">Stok Terendah</option>
+          <option value="price">Harga Tertinggi</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Table Section -->
+    <div class="table-container">
+      <div class="table-header">
+        <div class="table-title">
+          <h3>Daftar Stok Produk</h3>
+        </div>
+        <div class="table-actions">
+          <button class="btn-export">
+            <ion-icon name="download-outline"></ion-icon>
+            Export
+          </button>
+        </div>
+      </div>
+      <div class="table-content">
+        <div class="table-headers">
+          <div class="header-cell">No</div>
+          <div class="header-cell">Nama Produk</div>
+          <div class="header-cell">Kategori</div>
+          <div class="header-cell">Stok Saat Ini</div>
+          <div class="header-cell">Min. Stok</div>
+          <div class="header-cell">Harga Beli</div>
+          <div class="header-cell">Nilai Stok</div>
+          <div class="header-cell">Status</div>
+        </div>
+        <div class="table-rows">
+          <div *ngIf="isLoading" class="no-data">
+            <ion-icon name="sync-outline" spin></ion-icon> Memuat data...
+          </div>
+          <div *ngIf="!isLoading && paginatedProdukList.length === 0" class="no-data">
+            <ion-icon name="file-tray-outline"></ion-icon>
+            <p>Tidak ada data stok produk</p>
+          </div>
+          <div *ngFor="let p of paginatedProdukList; let i = index" class="table-row">
+            <div class="row-cell" data-label="No">{{ (page - 1) * pageSize + i + 1 }}</div>
+            <div class="row-cell" data-label="Nama Produk">{{ p.name }}</div>
+            <div class="row-cell" data-label="Kategori">{{ p.category?.name || '-' }}</div>
+            <div class="row-cell" data-label="Stok Saat Ini" [ngClass]="{
+              'stock-low': p.stock <= (p.minimum_stock || 5) && p.stock > 0,
+              'stock-out': p.stock === 0
+            }">{{ p.stock }}</div>
+            <div class="row-cell" data-label="Min. Stok">{{ p.minimum_stock || 5 }}</div>
+            <div class="row-cell" data-label="Harga Beli">Rp {{ p.price | number:'1.0-0' }}</div>
+            <div class="row-cell" data-label="Nilai Stok">Rp {{ (p.stock * p.price) | number:'1.0-0' }}</div>
+            <div class="row-cell" data-label="Status">
+              <span class="status-badge" [ngClass]="{
+                'status-available': getStockStatus(p.stock, p.minimum_stock) === 'tersedia',
+                'status-low': getStockStatus(p.stock, p.minimum_stock) === 'menipis',
+                'status-out': getStockStatus(p.stock, p.minimum_stock) === 'habis'
+              }">
+                {{ getStockStatus(p.stock, p.minimum_stock) === 'tersedia' ? 'Tersedia' :
+                getStockStatus(p.stock, p.minimum_stock) === 'menipis' ? 'Menipis' : 'Habis' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pagination -->
+    <div class="pagination-container" *ngIf="totalPages > 1">
+      <button (click)="prevPage()" [disabled]="page === 1">&lt; Sebelumnya</button>
+      <button *ngFor="let p of [].constructor(totalPages); let idx = index" (click)="goToPage(idx+1)"
+        [class.active]="page === (idx+1)">{{ idx+1 }}</button>
+      <button (click)="nextPage()" [disabled]="page === totalPages">Selanjutnya &gt;</button>
+    </div>
+  </div>
+</div>
