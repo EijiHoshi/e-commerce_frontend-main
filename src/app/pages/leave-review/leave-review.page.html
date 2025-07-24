@@ -1,0 +1,142 @@
+<ion-content class="leave-review-content">
+    <!-- Header -->
+    <div class="header">
+        <div class="header-content">
+            <div class="back-title">
+                <ion-icon name="arrow-back" (click)="goBack()"></ion-icon>
+                <h1>Leave Review</h1>
+            </div>
+            <div class="skip" (click)="skip()">Skip</div>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content" *ngIf="order">
+        <!-- Order Info Card -->
+        <div class="order-info-card">
+            <div class="order-header">
+                <div class="order-number">
+                    <span class="label">Order #{{ order.order_number }}</span>
+                    <span class="date">{{ order.created_at | date:'MMM dd, yyyy' }}</span>
+                </div>
+                <div class="order-status">
+                    <span class="status-badge">{{ order.status }}</span>
+                </div>
+            </div>
+
+            <div class="order-product-list">
+                <div class="order-product" *ngFor="let item of order.order_items">
+                    <img [src]="getProductImageUrl(item.product.image)" alt="{{item.product.name}}" />
+                    <div class="product-info">
+                        <div class="product-name">{{ item.product.name }}</div>
+                        <div class="product-qty">Qty: {{ item.quantity }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overall Rating -->
+        <div class="rating-section">
+            <h3>How was your overall experience?</h3>
+            <div class="stars-container">
+                <div class="star" *ngFor="let star of [1,2,3,4,5]; let i = index"
+                    [class.active]="reviewForm.get('overallRating')?.value >= star"
+                    (click)="setRating('overallRating', star)">
+                    <ion-icon name="star"></ion-icon>
+                </div>
+            </div>
+        </div>
+
+        <!-- Product Ratings -->
+        <div class="product-ratings" *ngFor="let item of order.order_items; let i = index">
+            <div class="product-review-card">
+                <div class="product-review-header">
+                    <img [src]="getProductImageUrl(item.product.image)" alt="{{item.product.name}}" />
+                    <div class="product-info">
+                        <div class="product-name">{{ item.product.name }}</div>
+                        <div class="product-qty">Qty: {{ item.quantity }}</div>
+                    </div>
+                </div>
+
+                <div class="product-rating">
+                    <div class="stars-container">
+                        <div class="star" *ngFor="let star of [1,2,3,4,5]; let j = index"
+                            [class.active]="(productRatingsArray.at(i).get('rating')?.value || 0) >= star"
+                            (click)="setProductRating(i, star)">
+                            <ion-icon name="star"></ion-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Comment Section -->
+        <div class="comment-section">
+            <h3>Add a comment (optional)</h3>
+            <div class="comment-container">
+                <form [formGroup]="reviewForm">
+                    <ion-textarea formControlName="comment" placeholder="Share your experience with this product..."
+                        rows="4" maxlength="500">
+                    </ion-textarea>
+                </form>
+                <div class="char-counter">
+                    {{ reviewForm.get('comment')?.value?.length || 0 }}/500
+                </div>
+            </div>
+        </div>
+
+        <!-- Photo Upload -->
+        <div class="photo-upload-section">
+            <h3>Add photos (optional)</h3>
+            <div class="upload-container">
+                <div class="upload-area" *ngIf="uploadedImages.length < maxImages">
+                    <input type="file" #fileInput multiple accept="image/*" (change)="onFileSelected($event)"
+                        style="display: none;">
+                    <div class="upload-button" (click)="fileInput.click()">
+                        <ion-icon name="camera"></ion-icon>
+                        <span>Add Photo</span>
+                    </div>
+                </div>
+
+                <div class="uploaded-images">
+                    <div class="image-item" *ngFor="let image of uploadedImages; let i = index">
+                        <img [src]="image" alt="Uploaded image">
+                        <div class="remove-btn" (click)="removeImage(i)">
+                            <ion-icon name="close"></ion-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Shipping Rating -->
+        <div class="shipping-rating-section">
+            <h3>Rate your shipping experience</h3>
+            <div class="shipping-rating">
+                <div class="rating-item">
+                    <span class="rating-label">Speed</span>
+                    <div class="stars-container">
+                        <div class="star" *ngFor="let star of [1,2,3,4,5]; let i = index"
+                            [class.active]="reviewForm.get('shippingRating')?.value >= star"
+                            (click)="setRating('shippingRating', star)">
+                            <ion-icon name="star"></ion-icon>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Actions -->
+    <div class="bottom-actions">
+        <div class="save-draft" (click)="saveDraft()">
+            <ion-icon name="save-outline"></ion-icon>
+            <span>Save Draft</span>
+        </div>
+
+        <div class="submit-review" (click)="submitReview()">
+            <ion-icon name="send"></ion-icon>
+            <span>Submit Review</span>
+        </div>
+    </div>
+</ion-content>

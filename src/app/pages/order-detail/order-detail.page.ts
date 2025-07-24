@@ -39,6 +39,7 @@ export class OrderDetailPage implements OnInit {
 
     fetchOrder(orderId: string) {
         this.loading = true;
+        this.error = null;
         this.api.get(`/orders/${orderId}`).subscribe({
             next: (res: any) => {
                 this.order = res.data;
@@ -60,6 +61,56 @@ export class OrderDetailPage implements OnInit {
                 this.trackingData = [];
             }
         });
+    }
+
+    // Get status icon for order status
+    getStatusIcon(status: string): string {
+        switch (status) {
+            case 'Menunggu Pembayaran':
+                return 'time-outline';
+            case 'Diproses':
+                return 'construct-outline';
+            case 'Dikirim':
+                return 'car-outline';
+            case 'Diterima':
+                return 'checkmark-circle-outline';
+            case 'Dibatalkan':
+                return 'close-circle-outline';
+            default:
+                return 'information-circle-outline';
+        }
+    }
+
+    // Get status description
+    getStatusDescription(status: string): string {
+        switch (status) {
+            case 'Menunggu Pembayaran':
+                return 'Silakan lakukan pembayaran sesuai instruksi';
+            case 'Diproses':
+                return 'Pesanan sedang diproses oleh tim kami';
+            case 'Dikirim':
+                return 'Pesanan sedang dalam perjalanan';
+            case 'Diterima':
+                return 'Pesanan telah diterima';
+            case 'Dibatalkan':
+                return 'Pesanan telah dibatalkan';
+            default:
+                return 'Status pesanan tidak diketahui';
+        }
+    }
+
+    // Get payment status text
+    getPaymentStatusText(status: string): string {
+        switch (status) {
+            case 'pending':
+                return 'Menunggu Pembayaran';
+            case 'paid':
+                return 'Lunas';
+            case 'failed':
+                return 'Gagal';
+            default:
+                return 'Tidak diketahui';
+        }
     }
 
     getTrackingIcon(status: string): string {
@@ -134,5 +185,22 @@ export class OrderDetailPage implements OnInit {
                 this.presentToast('Gagal mengkonfirmasi pesanan.', 'danger');
             }
         });
+    }
+
+    // Refresh order data
+    refreshOrder() {
+        if (this.order?.id) {
+            this.fetchOrder(this.order.id);
+            this.loadTrackingData(this.order.id);
+        }
+    }
+
+    // Retry loading when error occurs
+    retryLoad() {
+        const orderId = this.route.snapshot.paramMap.get('id');
+        if (orderId) {
+            this.fetchOrder(orderId);
+            this.loadTrackingData(orderId);
+        }
     }
 } 

@@ -61,9 +61,8 @@ export class OrderHistoryPage implements OnInit {
         this.router.navigate(['/order-detail', orderId]);
     }
 
-    leaveReview(orderId: number) {
-        // Navigasi ke halaman review (bisa disesuaikan)
-        this.router.navigate(['/leave-review', orderId]);
+    leaveReview(orderId: number, productId: number) {
+        this.router.navigate(['/leave-review', orderId], { queryParams: { productId } });
     }
 
     goBack() {

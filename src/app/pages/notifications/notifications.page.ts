@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
+import { NotificationService } from '../../services/notification.service';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Pipe, PipeTransform } from '@angular/core';
 import { Location } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Pipe({ name: 'timeAgo', standalone: true })
 export class TimeAgoPipe implements PipeTransform {
@@ -30,20 +32,33 @@ export class TimeAgoPipe implements PipeTransform {
     standalone: true,
     providers: [],
 })
-export class NotificationsPage implements OnInit {
+export class NotificationsPage implements OnInit, OnDestroy {
     notifications: any[] = [];
     loading = false;
     error = '';
+    private subscription: Subscription = new Subscription();
 
     constructor(
         private api: ApiService,
         private auth: AuthService,
+        private notificationService: NotificationService,
         private location: Location
     ) { }
 
     ngOnInit() {
         console.log('ngOnInit notifications');
         this.loadNotifications();
+
+        // Subscribe ke perubahan notifikasi
+        this.subscription.add(
+            this.notificationService.notifications$.subscribe(notifications => {
+                this.notifications = notifications;
+            })
+        );
+    }
+
+    ngOnDestroy() {
+        this.subscription.unsubscribe();
     }
 
     async loadNotifications() {
@@ -52,9 +67,16 @@ export class NotificationsPage implements OnInit {
         this.error = '';
 
         try {
-            const response = await this.api.get('/notifications').toPromise();
-            console.log('API response:', response);
-            this.notifications = response.data || [];
+            // Load notifikasi dari local storage (FCM)
+            const storedNotifications = localStorage.getItem('notifications');
+            this.notifications = storedNotifications ? JSON.parse(storedNotifications) : [];
+
+            // Jika tidak ada notifikasi FCM, coba load dari API (fallback)
+            if (this.notifications.length === 0) {
+                const response = await this.api.get('/notifications').toPromise();
+                console.log('API response:', response);
+                this.notifications = response.data || [];
+            }
         } catch (err: any) {
             console.error('API error:', err);
             this.error = err.error?.message || 'Gagal memuat notifikasi';
@@ -65,10 +87,14 @@ export class NotificationsPage implements OnInit {
 
     async markAsRead(notificationId: number) {
         try {
-            await this.api.post(`/notifications/${notificationId}/read`, {}).toPromise();
-            const notification = this.notifications.find(n => n.id === notificationId);
-            if (notification) {
-                notification.status = 'read';
+            // Mark as read di local storage (FCM)
+            this.notificationService.markAsRead(notificationId);
+
+            // Jika ada API endpoint, juga update di backend
+            try {
+                await this.api.post(`/notifications/${notificationId}/read`, {}).toPromise();
+            } catch (apiErr) {
+                console.log('API mark as read failed, but local update succeeded');
             }
         } catch (err: any) {
             this.error = err.error?.message || 'Gagal menandai sebagai dibaca';
@@ -77,13 +103,30 @@ export class NotificationsPage implements OnInit {
 
     async markAllAsRead() {
         try {
-            await this.api.post('/notifications/read-all', {}).toPromise();
+            // Mark all as read di local storage
             this.notifications.forEach(notification => {
-                notification.status = 'read';
+                if (!notification.read) {
+                    this.notificationService.markAsRead(notification.id);
+                }
             });
+
+            // Jika ada API endpoint, juga update di backend
+            try {
+                await this.api.post('/notifications/read-all', {}).toPromise();
+            } catch (apiErr) {
+                console.log('API mark all as read failed, but local update succeeded');
+            }
         } catch (err: any) {
             this.error = err.error?.message || 'Gagal menandai semua sebagai dibaca';
         }
+    }
+
+    deleteNotification(notificationId: number) {
+        this.notificationService.deleteNotification(notificationId);
+    }
+
+    clearAllNotifications() {
+        this.notificationService.clearAllNotifications();
     }
 
     getNotificationIcon(type: string): string {

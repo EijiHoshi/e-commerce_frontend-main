@@ -18,8 +18,12 @@ export class AuthService {
     ) { }
 
     login(email: string, password: string, remember: boolean = false): Observable<any> {
+        console.log('AuthService: Attempting login to:', `${this.apiUrl}/login`);
+        console.log('AuthService: Email:', email);
+
         return this.http.post(`${this.apiUrl}/login`, { email, password, remember }).pipe(
             tap((response: any) => {
+                console.log('AuthService: Login response received:', response);
                 if (response && response.token) {
                     localStorage.setItem('token', response.token);
                     if (response.user && response.user.role) {

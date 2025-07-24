@@ -105,4 +105,4 @@ export class RegisterPage {
             this.loading = false;
         }
     }
-} 
+}   

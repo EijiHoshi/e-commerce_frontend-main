@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
+import { NotificationService } from './services/notification.service';
 
 @Component({
   selector: 'app-root',
@@ -11,8 +12,9 @@ import { RouterModule } from '@angular/router';
   imports: [IonicModule, RouterModule]
 })
 export class AppComponent {
-  constructor(private router: Router) {
+  constructor(private router: Router, private notificationService: NotificationService) {
     this.checkAuth();
+    this.initFCM();
   }
 
   checkAuth() {
@@ -24,5 +26,21 @@ export class AppComponent {
       }
     }
     // Jika sudah login, biarkan user tetap di halaman manapun (dashboard, home, dll)
+  }
+
+  async initFCM() {
+    // Request permission dan ambil token FCM
+    const token = await this.notificationService.requestPermission();
+    if (token) {
+      // TODO: Kirim token ke backend jika perlu
+      console.log('FCM Token:', token);
+    }
+    // Listen pesan notifikasi
+    this.notificationService.currentMessage$.subscribe(msg => {
+      if (msg) {
+        // Tampilkan notifikasi sederhana (bisa diganti toast/modal/dll)
+        alert('Notifikasi: ' + (msg.notification?.title || 'Pesan baru'));
+      }
+    });
   }
 }

@@ -81,6 +81,10 @@ const routes: Routes = [
     path: 'notifications',
     loadComponent: () => import('./pages/notifications/notifications.page').then(m => m.NotificationsPage)
   },
+  {
+    path: 'leave-review/:orderId',
+    loadComponent: () => import('./pages/leave-review/leave-review.page').then(m => m.LeaveReviewPage)
+  },
   // Admin Routes
   {
     path: 'admin',
@@ -138,6 +142,14 @@ const routes: Routes = [
   {
     path: 'chat',
     loadComponent: () => import('./pages/chat/chat.page').then(m => m.ChatPage)
+  },
+  {
+    path: 'backend-test',
+    loadComponent: () => import('./components/backend-test/backend-test.component').then(m => m.BackendTestComponent)
+  },
+  {
+    path: 'login-debug',
+    loadComponent: () => import('./components/login-debug/login-debug.component').then(m => m.LoginDebugComponent)
   },
   {
     path: '**',

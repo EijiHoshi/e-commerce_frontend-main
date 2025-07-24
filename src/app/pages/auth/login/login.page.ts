@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastController, IonicModule } from '@ionic/angular';
 import { AuthService } from '../../../services/auth.service';
+import { LoginDebugService } from '../../../services/login-debug.service';
+import { environment } from '../../../../environments/environment';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
@@ -21,6 +23,7 @@ export class LoginPage {
 
     constructor(
         private authService: AuthService,
+        private loginDebug: LoginDebugService,
         private router: Router,
         private toastController: ToastController
     ) { }
@@ -37,8 +40,34 @@ export class LoginPage {
         }
 
         this.loading = true;
+
+        // Debug information
+        this.loginDebug.logEnvironmentConfig();
+        this.loginDebug.logBrowserInfo();
+        this.loginDebug.logLocalStorage();
+
         try {
-            console.log('Attempting login with:', { email: this.email, remember: this.rememberMe });
+            console.log('=== Login Attempt ===');
+            console.log('Email:', this.email);
+            console.log('Remember me:', this.rememberMe);
+            console.log('API URL:', environment.apiUrl);
+
+            // Test backend connection first
+            try {
+                await this.loginDebug.testBackendConnection().toPromise();
+                console.log('Backend connection test passed');
+            } catch (backendError) {
+                console.error('Backend connection test failed:', backendError);
+                const toast = await this.toastController.create({
+                    message: 'Backend connection failed. Please check if Laravel server is running.',
+                    duration: 3000,
+                    color: 'danger'
+                });
+                toast.present();
+                return;
+            }
+
+            // Test login endpoint
             const response = await this.authService.login(this.email, this.password, this.rememberMe).toPromise();
             console.log('Login response:', response);
 
@@ -54,13 +83,35 @@ export class LoginPage {
                     this.router.navigate(['/home']);
                 }
             } else {
-                throw new Error('Invalid response format');
+                throw new Error('Invalid response format - no token received');
             }
         } catch (error: any) {
-            console.error('Login error:', error);
+            console.error('=== Login Error Details ===');
+            console.error('Error type:', typeof error);
+            console.error('Error message:', error.message);
+            console.error('Error status:', error.status);
+            console.error('Error statusText:', error.statusText);
+            console.error('Error error:', error.error);
+            console.error('Error url:', error.url);
+            console.error('Full error object:', error);
+
+            let errorMessage = 'Login failed. Please check your credentials.';
+
+            if (error.status === 0) {
+                errorMessage = 'Cannot connect to server. Please check if backend is running.';
+            } else if (error.status === 401) {
+                errorMessage = 'Invalid credentials. Please check your email and password.';
+            } else if (error.status === 422) {
+                errorMessage = error.error?.message || 'Validation error. Please check your input.';
+            } else if (error.status === 500) {
+                errorMessage = 'Server error. Please try again later.';
+            } else if (error.error?.message) {
+                errorMessage = error.error.message;
+            }
+
             const toast = await this.toastController.create({
-                message: error.error?.message || 'Login failed. Please check your credentials.',
-                duration: 2000,
+                message: errorMessage,
+                duration: 3000,
                 color: 'danger'
             });
             toast.present();

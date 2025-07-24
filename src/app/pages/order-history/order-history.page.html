@@ -32,8 +32,10 @@
             <div class="order-action-box">
                 <button *ngIf="activeTab === 'active'" class="order-detail-btn" (click)="goToDetail(order.id)">Track
                     Order</button>
-                <button *ngIf="activeTab === 'finished'" class="order-leave-review-btn"
-                    (click)="leaveReview(order.id)">Leave Review</button>
+                <button
+                    *ngIf="activeTab === 'finished' && order.status === 'Diterima' && !order.order_items[0]?.product?.has_review"
+                    class="order-leave-review-btn"
+                    (click)="leaveReview(order.id, order.order_items[0].product.id)">Leave Review</button>
                 <button *ngIf="activeTab === 'canceled'" class="order-reorder-btn"
                     (click)="reOrder(order.id)">Re-Order</button>
             </div>

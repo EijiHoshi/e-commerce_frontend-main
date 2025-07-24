@@ -46,26 +46,33 @@ export class ApiService {
         if (!path) return '';
         if (path.startsWith('http')) return path;
 
+        // Gunakan imageBaseUrl dari environment
+        const baseUrl = environment.imageBaseUrl;
+
         // Jika path sudah mengandung 'images/', langsung gabungkan
         if (path.startsWith('images/')) {
-            return `${environment.apiUrl.replace('/api', '')}/${path}`;
+            return `${baseUrl}/${path}`;
         }
 
         // Jika path sudah mengandung 'storage/', langsung gabungkan
         if (path.startsWith('storage/')) {
-            return `${environment.apiUrl.replace('/api', '')}/${path}`;
+            return `${baseUrl}/${path}`;
         }
 
         // Default: tambahkan 'images/products/' di depan jika hanya nama file
-        return `${environment.apiUrl.replace('/api', '')}/images/products/${path}`;
+        return `${baseUrl}/images/products/${path}`;
     }
 
     // Auth Services
     login(email: string, password: string): Observable<any> {
+        console.log('ApiService: Attempting login to:', `${this.apiUrl}/login`);
+        console.log('ApiService: Email:', email);
         return this.http.post(`${this.apiUrl}/login`, { email, password });
     }
 
     register(userData: any): Observable<any> {
+        console.log('ApiService: Attempting register to:', `${this.apiUrl}/register`);
+        console.log('ApiService: User data:', userData);
         return this.http.post(`${this.apiUrl}/register`, userData);
     }
 
